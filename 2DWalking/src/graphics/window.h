@@ -3,6 +3,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "../inputs/input.h"
+
+
 class Window
 {
 private:
@@ -10,6 +13,7 @@ private:
 	int width, height;
 	bool is_closed;
 	GLFWwindow *window;
+	InputManager *inputManager;
 
 public:
 	Window(const char *title, int width, int height);

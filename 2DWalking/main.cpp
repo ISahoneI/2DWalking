@@ -7,7 +7,8 @@ int main()
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	while (!window.closed())
 	{
-		//std::cout << window.getWidth() << " : " << window.getHeight() << std::endl;
+		//std::cout << "Resolution: " << window.getWidth() << ":" << window.getHeight() << std::endl;
+		//std::cout << "Position Curseur: " << std::endl;
 		window.clear();
 		glBegin(GL_TRIANGLES);
 		glVertex2f(-0.5f, -0.5f);

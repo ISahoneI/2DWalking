@@ -5,8 +5,10 @@ Window::Window(const char * title, int width, int height)
 	this->title = title;
 	this->width = width;
 	this->height = height;
-	if(!init())
+	if (!init())
 		glfwTerminate();
+	inputManager = new InputManager();
+	glfwSetKeyCallback(window, InputManager::key_callback);
 }
 
 Window::~Window()
