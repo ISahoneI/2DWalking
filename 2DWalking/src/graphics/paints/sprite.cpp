@@ -48,7 +48,7 @@ void Sprite::submit(Renderer * renderer) const
 
 void Sprite::setTransparency(float alpha)
 {
-
+	this->color = ColorManager::getHexaColorf(1.0f, 1.0f, 1.0f, alpha);
 }
 
 void Sprite::setTexUV()

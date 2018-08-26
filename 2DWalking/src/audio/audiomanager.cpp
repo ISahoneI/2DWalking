@@ -1,8 +1,11 @@
 #include "audiomanager.h"
 
+std::vector<ALuint> AudioManager::buffers;
+
 AudioManager::AudioManager()
 {
-	init();
+	alutInit(NULL, NULL);
+	alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
 }
 
 AudioManager::~AudioManager()
@@ -19,12 +22,12 @@ ALuint AudioManager::loadSound(const char* filePath)
 		std::cout << "Failed to load the sound : " << filePath << " !" << std::endl;
 		return NULL;
 	}
-	this->buffers.push_back(buffer);
+	buffers.push_back(buffer);
 
 	return buffer;
 }
 
-void AudioManager::init()
+void AudioManager::setListenerPosition(float x, float y, float z)
 {
-	alutInit(NULL, NULL);
+	alListener3f(AL_POSITION, x, y, z);
 }

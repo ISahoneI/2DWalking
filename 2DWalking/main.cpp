@@ -62,6 +62,8 @@ int main()
 	Sprite* map = new Sprite(0.0f, 0.0f, tilescale * 800.0f/16, tilescale * 1680.0f/16, new Texture("res/textures/Omara.png"), ColorManager::getHexaColori(255, 255, 255, 255));
 	layer.add(map);
 	Sprite* player = new Sprite(12, 8, 0.6f * 24/16, 0.6f * 32/16, yzao_tex[0], ColorManager::getHexaColori(255, 254, 253, 252));
+	Sprite* skyle = new Sprite(12, 8, 0.6f * 24 / 16, 0.6f * 32 / 16, new Texture("res/textures/skyle_bas.png"));
+	layer.add(skyle);
 	layer.add(player);
 
 	Sprite* brouillard = new Sprite(0, 0, 16, 9, new Texture("res/textures/brouillard_bleu.png"), ColorManager::getHexaColori(255, 255, 255, 70));
@@ -77,8 +79,10 @@ int main()
 	//-------------SOUND-------------------
 	//-------------------------------------
 	AudioManager* aud = new AudioManager();
-	ALuint buff = aud->loadSound(DW_SOUND_1);
+	ALuint buff = AudioManager::loadSound(DW_SOUND_1);
 	Source* hp = new Source();
+	hp->setPosition(skyle->getPositionX(), skyle->getPositionY(), 2);
+	Source* music = new Source();
 
 	bool input_i = false;
 	float player_speed = 3.0f;
@@ -184,14 +188,15 @@ int main()
 		{
 			if(player_trans < 1.0f)
 				player_trans += 0.001f;
-			player->setColor(ColorManager::getHexaColorf(1.0f, 1.0f, 1.0f, player_trans));
+			//player->setColor(ColorManager::getHexaColorf(1.0f, 1.0f, 1.0f, player_trans));
+			player->setTransparency(player_trans);
 		}
 		if (InputManager::isKeyPressed(GLFW_KEY_R))
 		{
 			if(player_trans > 0.0f)
 				player_trans -= 0.001f;
-			player->setColor(ColorManager::getHexaColorf(1.0f, 1.0f, 1.0f, player_trans));
-			//player->setTransparency(player_trans);
+			//player->setColor(ColorManager::getHexaColorf(1.0f, 1.0f, 1.0f, player_trans));
+			player->setTransparency(player_trans);
 		}
 	/*	if (InputManager::isKeyPressed(GLFW_KEY_I) && input_i == false)
 		{
@@ -200,8 +205,9 @@ int main()
 		}
 		if (!InputManager::isKeyPressed(GLFW_KEY_I))
 			input_i = false;*/
+		AudioManager::setListenerPosition(player->getPositionX(), player->getPositionY(), player->getPositionZ());
 		if (InputManager::isKeyPressedOnce(GLFW_KEY_I))
-			hp->play(buff);
+			hp->play(buff, 1.0f, 1.0f);
 		if (InputManager::isMouseButtonPressedOnce(GLFW_MOUSE_BUTTON_1))
 			hp->play(buff);
 

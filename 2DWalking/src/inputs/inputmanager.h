@@ -34,8 +34,8 @@ public:
 	static void getMousePosition(double& x, double& y);
 
 	static double getScrollYOffset();
-	 static double getMousePosX() { return mousePosX; }
-	 static double getMousePosY() { return mousePosY; }
-	 void setMousePosX(double val) { mousePosX = val; }
-	 void setMousePosY(double val) { mousePosY = val; }
+	static double getMousePosX() { return mousePosX; }
+	static double getMousePosY() { return mousePosY; }
+	void setMousePosX(double val) { mousePosX = val; }
+	void setMousePosY(double val) { mousePosY = val; }
 };

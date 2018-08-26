@@ -5,19 +5,17 @@
 #include <AL/alut.h>
 
 #define DW_MUSIC_1 "res/sound/music/music1.ogg"
-#define DW_SOUND_1 "res/sound/se/test.wav"
+#define DW_SOUND_1 "res/sound/se/Skyle_Hit1.wav"
 
 class AudioManager
 {
 private:
-	std::vector<ALuint> buffers;
+	static std::vector<ALuint> buffers;
 
 public:
 	AudioManager();
 	~AudioManager();
 
-	ALuint loadSound(const char* filePath);
-
-private:
-	void init();
+	static ALuint loadSound(const char* filePath);
+	static void setListenerPosition(float x, float y, float z);
 };
