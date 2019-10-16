@@ -13,7 +13,7 @@ public:
 		if (file == nullptr)
 		{
 			std::cout << "Could not find the file : " << path << " !" << std::endl;
-			return NULL;
+			return std::string();
 		}
 		fseek(file, 0, SEEK_END);
 		unsigned long lenght = ftell(file);
@@ -42,10 +42,5 @@ public:
 	static void free_image(unsigned char* data)
 	{
 		stbi_image_free(data);
-	}
-
-	static void load_sound(const char* path)
-	{
-		
 	}
 };

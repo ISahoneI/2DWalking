@@ -10,26 +10,26 @@ public:
 
 	static void print_elements(const glm::mat4 mat)
 	{
-		const float *pSource = (const float*)glm::value_ptr(mat);
+		const float *pSound = (const float*)glm::value_ptr(mat);
 		for (int i = 0; i < 16; i++)
-			std::cout << pSource[i] << ", ";
+			std::cout << pSound[i] << ", ";
 		std::cout << std::endl;
 	}
 
 	static void get_elements(const glm::mat4 mat, float buff[16])
 	{
-		const float *pSource = (const float*)glm::value_ptr(mat);
+		const float *pSound = (const float*)glm::value_ptr(mat);
 		for (int i = 0; i < 16; ++i)
-			buff[i] = pSource[i];
+			buff[i] = pSound[i];
 	}
 
 	static glm::vec3 multiply_mat4_vec3(const glm::mat4 mat, const glm::vec3 vec)
 	{
-		const float *pSource = (const float*)glm::value_ptr(mat);
+		const float *pSound = (const float*)glm::value_ptr(mat);
 		return glm::vec3(
-			pSource[0] * vec.x + pSource[1] * vec.y + pSource[2] * vec.z + pSource[3],
-			pSource[4] * vec.x + pSource[5] * vec.y + pSource[6] * vec.z + pSource[7],
-			pSource[8] * vec.x + pSource[9] * vec.y + pSource[10] * vec.z + pSource[11]
+			pSound[0] * vec.x + pSound[1] * vec.y + pSound[2] * vec.z + pSound[3],
+			pSound[4] * vec.x + pSound[5] * vec.y + pSound[6] * vec.z + pSound[7],
+			pSound[8] * vec.x + pSound[9] * vec.y + pSound[10] * vec.z + pSound[11]
 		);
 	}
 

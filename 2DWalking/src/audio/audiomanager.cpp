@@ -1,6 +1,7 @@
 #include "audiomanager.h"
 
 std::vector<ALuint> AudioManager::buffers;
+Music AudioManager::bgm;
 
 AudioManager::AudioManager()
 {
@@ -14,9 +15,9 @@ AudioManager::~AudioManager()
 		alDeleteBuffers(1, &buffer);
 }
 
-ALuint AudioManager::loadSound(const char* filePath)
+ALuint AudioManager::loadWavSound(const char* filePath)
 {
-	ALuint buffer = buffer = alutCreateBufferFromFile(filePath);
+	ALuint buffer = alutCreateBufferFromFile(filePath);
 	if (buffer == AL_NONE)
 	{
 		std::cout << "Failed to load the sound : " << filePath << " !" << std::endl;
@@ -25,6 +26,24 @@ ALuint AudioManager::loadSound(const char* filePath)
 	buffers.push_back(buffer);
 
 	return buffer;
+}
+
+
+void AudioManager::playMusic(const char* filePath)
+{
+	bgm.stop();
+	bgm.init();
+	bgm.open(filePath);
+}
+
+void AudioManager::updateMusic()
+{
+	bgm.update();
+}
+
+void AudioManager::stopMusic()
+{
+	bgm.stop();
 }
 
 void AudioManager::setListenerPosition(float x, float y, float z)
