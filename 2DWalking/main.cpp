@@ -79,9 +79,12 @@ int main()
 	//-------------SOUND-------------------
 	//-------------------------------------
 	AudioManager aud;
-	ALuint buff = AudioManager::loadWavSound(DW_SOUND_1);
+	ALuint buff = AudioManager::getBufferSound(DW_SOUND_1);
+	ALuint buff2 = AudioManager::getBufferSound(DW_SOUND_2);
 	Sound* hp = new Sound();
 	hp->setPosition(skyle->getPositionX(), skyle->getPositionY(), 2);
+	Sound* hp2 = new Sound();
+	hp2->setPosition(skyle->getPositionX(), skyle->getPositionY(), 2);
 
 	bool input_i = false;
 	float player_speed = 3.0f;
@@ -92,7 +95,7 @@ int main()
 	Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 	float lastFrame = 0.0f, deltaTime = 0.0f;
 	bool firstMouse = true;
-	AudioManager::playMusic(DW_MUSIC_1);
+	AudioManager::playMusic(DW_MUSIC_3);
 	/*AudioStream musicStream;
 	AudioStreamInit(&musicStream);
 	AudioStreamOpen(&musicStream, DW_MUSIC_1);*/
@@ -208,9 +211,13 @@ int main()
 		}
 		if (!InputManager::isKeyPressed(GLFW_KEY_I))
 			input_i = false;*/
-		AudioManager::setListenerPosition(player->getPositionX(), player->getPositionY(), player->getPositionZ());
+		AudioManager::setListenerPosition(glm::vec3(player->getPositionX(), player->getPositionY(), player->getPositionZ()));
 		if (InputManager::isKeyPressedOnce(GLFW_KEY_I))
 			hp->play(buff, 1.0f, 1.0f);
+		if (InputManager::isKeyPressedOnce(GLFW_KEY_J))
+			hp->play(buff2, 1.0f, 1.0f);
+		if (InputManager::isKeyPressedOnce(GLFW_KEY_L))
+			AudioManager::playSound(glm::vec3(player->getPositionX(), player->getPositionY(), player->getPositionZ() + 5.0f), DW_SOUND_1, 1.0f, 1.0f);
 
 		if (InputManager::isKeyPressed(GLFW_KEY_O))
 			AudioManager::playMusic(DW_MUSIC_4);

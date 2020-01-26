@@ -25,12 +25,18 @@ void Sound::play(ALuint buffer, float volume, float pitch)
 	alSourcef(this->id, AL_GAIN, volume);
 	alSourcef(this->id, AL_PITCH, pitch);
 	alSourcei(this->id, AL_BUFFER, buffer);
+	//alSourcei(this->id, AL_LOOPING, 1);
 	alSourcePlay(this->id);
 }
 
 void Sound::setPosition(float x, float y, float z)
 {
 	alSource3f(this->id, AL_POSITION, x, y, z);
+}
+
+void Sound::setPosition(glm::vec3 position)
+{
+	alSource3f(this->id, AL_POSITION, position.x, position.y, position.z);
 }
 
 void Sound::setVolume(float gain)
@@ -57,5 +63,6 @@ void Sound::setMaxDistance(float distance)
 {
 	alSourcef(this->id, AL_MAX_DISTANCE, distance);
 }
+
 
 

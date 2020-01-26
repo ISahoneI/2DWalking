@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\audio\ambient.cpp" />
     <ClCompile Include="src\audio\audiomanager.cpp" />
     <ClCompile Include="src\audio\music.cpp" />
     <ClCompile Include="src\audio\sound.cpp" />
@@ -38,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\2dwalking.h" />
+    <ClInclude Include="src\audio\ambient.h" />
     <ClInclude Include="src\audio\audiomanager.h" />
     <ClInclude Include="src\audio\music.h" />
     <ClInclude Include="src\audio\sound.h" />
@@ -147,7 +149,7 @@
       </AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;openal32.lib;alut.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:msvcrt /NODEFAULTLIB:libcmt %(AdditionalOptions)</AdditionalOptions>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
     </Link>
