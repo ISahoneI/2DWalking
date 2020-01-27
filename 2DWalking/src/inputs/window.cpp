@@ -99,7 +99,18 @@ void Window::key_callback(GLFWwindow * window, int key, int scancode, int action
 	{
 		if (win->is_fullscreen == false)
 		{
-			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, 1280, 720, GLFW_DONT_CARE);
+			const GLFWvidmode* reso = glfwGetVideoMode(glfwGetPrimaryMonitor());
+			int width = reso->width;
+			int height = reso->height;
+			if (height > 1080) {
+				width = 2560;
+				height = 1440;
+			}
+			else {
+				width = 1280;
+				height = 720;
+			}
+			glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, width, height, GLFW_DONT_CARE);
 			win->is_fullscreen = true;
 		}
 		else

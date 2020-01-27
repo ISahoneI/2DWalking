@@ -8,6 +8,7 @@
 #include "music.h"
 #include "soundpaths.h"
 #include "sound.h"
+#include "ambient.h"
 
 class AudioManager
 {
@@ -23,7 +24,7 @@ public:
 	static ALuint loadWavSound(const char* filePath);
 	static ALuint getBufferSound(const char* filePath);
 	static void playSound(glm::vec3 position, const char* filePath, float volume = 1.0f, float pitch = 1.0f);
-
+	static void playAmbient(glm::vec3 position, const char* filePath, float volume = 1.0f, float pitch = 1.0f);
 
 	static void playMusic(const char* filePath);
 	static void updateMusic();

@@ -4,11 +4,11 @@
 
 class Ambient : public Sound {
 	private:
-		unsigned int startLoop;
+		
 		
 	public:
 		Ambient();
 		~Ambient();
 
-
+		void play(ALuint buffer, float volume, float pitch);
 };

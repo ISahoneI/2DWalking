@@ -1,7 +1,7 @@
 #include "ambient.h"
 
 
-Ambient::Ambient()
+Ambient::Ambient() : Sound()
 {
 	
 }
@@ -9,4 +9,10 @@ Ambient::Ambient()
 Ambient::~Ambient()
 {
 
+}
+
+void Ambient::play(ALuint buffer, float volume, float pitch)
+{
+	alSourcei(id, AL_LOOPING, 1);
+	Sound::play(buffer, volume, pitch);
 }

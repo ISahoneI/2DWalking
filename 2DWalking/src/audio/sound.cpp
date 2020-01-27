@@ -25,7 +25,6 @@ void Sound::play(ALuint buffer, float volume, float pitch)
 	alSourcef(this->id, AL_GAIN, volume);
 	alSourcef(this->id, AL_PITCH, pitch);
 	alSourcei(this->id, AL_BUFFER, buffer);
-	//alSourcei(this->id, AL_LOOPING, 1);
 	alSourcePlay(this->id);
 }
 

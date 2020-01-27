@@ -4,7 +4,7 @@
 #include "../utilities/mathmanager.h"
 
 class Sound {
-private:
+protected:
 	ALuint id;
 	float posX, posY, posZ;
 	float volume;

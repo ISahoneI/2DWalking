@@ -5,7 +5,7 @@
 #define DW_SOUND_2 "res/sound/se/test.wav"
 
 //AMBIENT
-#define DW_AMBIENT_1 "res/sound/ambient/bug.wav"
+#define DW_AMBIENT_1 "res/sound/ambient/criquet.wav"
 
 //MUSIC
 #define DW_MUSIC_1 "res/sound/music/music1.ogg"

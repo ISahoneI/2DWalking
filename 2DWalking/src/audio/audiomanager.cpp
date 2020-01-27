@@ -1,5 +1,6 @@
 #include "audiomanager.h"
 
+
 std::map <std::string, ALuint> AudioManager::soundBuffers;
 Music AudioManager::bgm;
 
@@ -8,7 +9,8 @@ AudioManager::AudioManager()
 	alutInit(NULL, NULL);
 	soundBuffers = {
 		{ DW_SOUND_1, AudioManager::loadWavSound(DW_SOUND_1) },
-		{ DW_SOUND_2, AudioManager::loadWavSound(DW_SOUND_2) }
+		{ DW_SOUND_2, AudioManager::loadWavSound(DW_SOUND_2) },
+		{ DW_AMBIENT_1, AudioManager::loadWavSound(DW_AMBIENT_1) }
 	};
 
 	alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
@@ -16,12 +18,8 @@ AudioManager::AudioManager()
 
 AudioManager::~AudioManager()
 {
-	for (auto it = soundBuffers.begin(); it != soundBuffers.end(); ++it) {
+	for (auto it = soundBuffers.begin(); it != soundBuffers.end(); ++it)
 		alDeleteBuffers(1, &it->second);
-	}
-
-	//for(ALuint buffer : this->buffers)
-	//	alDeleteBuffers(1, &buffer);
 }
 
 ALuint AudioManager::loadWavSound(const char* filePath)
@@ -32,7 +30,6 @@ ALuint AudioManager::loadWavSound(const char* filePath)
 		std::cout << "Failed to load the sound : " << filePath << " !" << std::endl;
 		return NULL;
 	}
-	//buffers.push_back(buffer);
 
 	return buffer;
 }
@@ -50,6 +47,13 @@ void AudioManager::playSound(glm::vec3 position, const char* filePath, float vol
 	sound->play(buffer, volume, pitch);
 }
 
+void AudioManager::playAmbient(glm::vec3 position, const char* filePath, float volume, float pitch)
+{
+	ALuint buffer = getBufferSound(filePath);
+	Ambient* ambient = new Ambient();
+	ambient->setPosition(position);
+	ambient->play(buffer, volume, pitch);
+}
 
 
 void AudioManager::playMusic(const char* filePath)

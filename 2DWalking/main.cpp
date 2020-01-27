@@ -18,6 +18,7 @@
 
 #include "src/audio/audiomanager.h"
 #include "src/audio/sound.h"
+#include "src/audio/ambient.h"
 
 int main()
 {
@@ -80,10 +81,10 @@ int main()
 	//-------------------------------------
 	AudioManager aud;
 	ALuint buff = AudioManager::getBufferSound(DW_SOUND_1);
-	ALuint buff2 = AudioManager::getBufferSound(DW_SOUND_2);
+	ALuint buff2 = AudioManager::getBufferSound(DW_AMBIENT_1);
 	Sound* hp = new Sound();
 	hp->setPosition(skyle->getPositionX(), skyle->getPositionY(), 2);
-	Sound* hp2 = new Sound();
+	Ambient* hp2 = new Ambient();
 	hp2->setPosition(skyle->getPositionX(), skyle->getPositionY(), 2);
 
 	bool input_i = false;
@@ -215,9 +216,9 @@ int main()
 		if (InputManager::isKeyPressedOnce(GLFW_KEY_I))
 			hp->play(buff, 1.0f, 1.0f);
 		if (InputManager::isKeyPressedOnce(GLFW_KEY_J))
-			hp->play(buff2, 1.0f, 1.0f);
+			hp2->play(buff2, 1.0f, 1.0f);
 		if (InputManager::isKeyPressedOnce(GLFW_KEY_L))
-			AudioManager::playSound(glm::vec3(player->getPositionX(), player->getPositionY(), player->getPositionZ() + 5.0f), DW_SOUND_1, 1.0f, 1.0f);
+			AudioManager::playAmbient(glm::vec3(player->getPositionX(), player->getPositionY(), player->getPositionZ() + 5.0f), DW_AMBIENT_1, 1.0f, 1.0f);
 
 		if (InputManager::isKeyPressed(GLFW_KEY_O))
 			AudioManager::playMusic(DW_MUSIC_4);
