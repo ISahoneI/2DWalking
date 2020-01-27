@@ -39,19 +39,17 @@ ALuint AudioManager::getBufferSound(const char* filePath)
 	return soundBuffers.at(filePath);
 }
 
-void AudioManager::playSound(glm::vec3 position, const char* filePath, float volume, float pitch)
+void AudioManager::playSound(const char* filePath, float volume, float pitch)
 {
 	ALuint buffer = getBufferSound(filePath);
 	Sound* sound = new Sound();
-	sound->setPosition(position);
 	sound->play(buffer, volume, pitch);
 }
 
-void AudioManager::playAmbient(glm::vec3 position, const char* filePath, float volume, float pitch)
+void AudioManager::playAmbient(const char* filePath, float volume, float pitch)
 {
 	ALuint buffer = getBufferSound(filePath);
 	Ambient* ambient = new Ambient();
-	ambient->setPosition(position);
 	ambient->play(buffer, volume, pitch);
 }
 

@@ -20,9 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\audio\ambient.cpp" />
+    <ClCompile Include="src\audio\ambient3d.cpp" />
     <ClCompile Include="src\audio\audiomanager.cpp" />
     <ClCompile Include="src\audio\music.cpp" />
     <ClCompile Include="src\audio\sound.cpp" />
+    <ClCompile Include="src\audio\sound3d.cpp" />
     <ClCompile Include="src\graphics\layers\group.cpp" />
     <ClCompile Include="src\graphics\layers\layer.cpp" />
     <ClCompile Include="src\graphics\paints\sprite.cpp" />
@@ -40,9 +42,11 @@
   <ItemGroup>
     <ClInclude Include="src\2dwalking.h" />
     <ClInclude Include="src\audio\ambient.h" />
+    <ClInclude Include="src\audio\ambient3d.h" />
     <ClInclude Include="src\audio\audiomanager.h" />
     <ClInclude Include="src\audio\music.h" />
     <ClInclude Include="src\audio\sound.h" />
+    <ClInclude Include="src\audio\sound3d.h" />
     <ClInclude Include="src\audio\soundpaths.h" />
     <ClInclude Include="src\graphics\paints\colormanager.h" />
     <ClInclude Include="src\graphics\layers\group.h" />

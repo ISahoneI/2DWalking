@@ -10,5 +10,4 @@ class Ambient : public Sound {
 		Ambient();
 		~Ambient();
 
-		void play(ALuint buffer, float volume, float pitch);
 };

@@ -23,8 +23,8 @@ public:
 
 	static ALuint loadWavSound(const char* filePath);
 	static ALuint getBufferSound(const char* filePath);
-	static void playSound(glm::vec3 position, const char* filePath, float volume = 1.0f, float pitch = 1.0f);
-	static void playAmbient(glm::vec3 position, const char* filePath, float volume = 1.0f, float pitch = 1.0f);
+	static void playSound(const char* filePath, float volume = 1.0f, float pitch = 1.0f);
+	static void playAmbient(const char* filePath, float volume = 1.0f, float pitch = 1.0f);
 
 	static void playMusic(const char* filePath);
 	static void updateMusic();

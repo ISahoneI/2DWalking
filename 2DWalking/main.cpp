@@ -19,6 +19,8 @@
 #include "src/audio/audiomanager.h"
 #include "src/audio/sound.h"
 #include "src/audio/ambient.h"
+#include "src/audio/sound3d.h"
+#include "src/audio/ambient3d.h"
 
 int main()
 {
@@ -82,9 +84,10 @@ int main()
 	AudioManager aud;
 	ALuint buff = AudioManager::getBufferSound(DW_SOUND_1);
 	ALuint buff2 = AudioManager::getBufferSound(DW_AMBIENT_1);
-	Sound* hp = new Sound();
+	Sound3d* hp = new Sound3d();
 	hp->setPosition(skyle->getPositionX(), skyle->getPositionY(), 2);
-	Ambient* hp2 = new Ambient();
+	Sound* hpRel = new Sound();
+	Ambient3d* hp2 = new Ambient3d();
 	hp2->setPosition(skyle->getPositionX(), skyle->getPositionY(), 2);
 
 	bool input_i = false;
@@ -215,10 +218,12 @@ int main()
 		AudioManager::setListenerPosition(glm::vec3(player->getPositionX(), player->getPositionY(), player->getPositionZ()));
 		if (InputManager::isKeyPressedOnce(GLFW_KEY_I))
 			hp->play(buff, 1.0f, 1.0f);
+		if (InputManager::isKeyPressedOnce(GLFW_KEY_P))
+			hpRel->play(buff, 1.0f, 1.0f);
 		if (InputManager::isKeyPressedOnce(GLFW_KEY_J))
 			hp2->play(buff2, 1.0f, 1.0f);
 		if (InputManager::isKeyPressedOnce(GLFW_KEY_L))
-			AudioManager::playAmbient(glm::vec3(player->getPositionX(), player->getPositionY(), player->getPositionZ() + 5.0f), DW_AMBIENT_1, 1.0f, 1.0f);
+			AudioManager::playAmbient(DW_AMBIENT_1, 1.0f, 1.0f);
 
 		if (InputManager::isKeyPressed(GLFW_KEY_O))
 			AudioManager::playMusic(DW_MUSIC_4);
