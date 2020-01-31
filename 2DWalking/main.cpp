@@ -24,7 +24,7 @@
 
 int main()
 {
-	//1280x720	854x480	  426x240
+	//2560x1440		1280x720	854x480	  426x240
 	Window window("2D Walking", 854, 480, false);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -44,17 +44,8 @@ int main()
 	};
 
 	Layer layer(&shad), layer2(&shad2);
-	int count = 0;
 	float tilescale = 0.6f;
-	/*for (float y = 0; y < 9.0f; y += tilescale)
-	{
-		for (float x = 0; x < 16.0f; x += tilescale)
-		{
-			layer.add(new Sprite(x, y, tilescale, tilescale, textures[0]));
-			count++;
-		}
-	}*/
-	std::cout << "Taille liste sprite :" << count << std::endl;
+	
 	Texture* yzao_tex[]
 	{
 		new Texture("res/textures/yzao_bas.png"),
@@ -71,16 +62,26 @@ int main()
 
 	Sprite* brouillard = new Sprite(0, 0, 16, 9, new Texture("res/textures/brouillard_bleu.png"), ColorManager::getHexaColori(255, 255, 255, 70));
 	layer2.add(brouillard);
-	/*Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(4, 4, 0)));
+
+	/******TEST AJOUT DE VRAI SPRITE AVEC TEXTURE******/
+	/*for (float y = 0; y < 9.0f; y += tilescale)
+	{
+		for (float x = 0; x < 16.0f; x += tilescale)
+		{
+			layer.add(new Sprite(x, y, tilescale, tilescale, textures[0]));
+		}
+	}*/
+
+	/***TEST GROUPE DE SPRITE SANS TEXTURE***/
+	Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(4, 4, 0)));
 	group->add(new Sprite(4, 4, 4, 4, glm::vec4(1, 1, 0, 0.4f)));
 	group->add(new Sprite(4, 4, 3, 3, 0x880000ff));
 	group->add(new Sprite(4, 4, 2, 2, glm::vec4(1, 0, 1, 0.4f)));
 	group->add(new Sprite(4, 4, 1, 1, glm::vec4(0, 1, 0, 0.4f)));
 	layer2.add(group);
-	layer2.add(new Sprite(8, 6, 1, 1, glm::vec4(0.3f, 0.3f, 0.3f, 0.8f)));*/
+	layer2.add(new Sprite(8, 6, 1, 1, ColorManager::getHexaColorf(0.3f, 0.3f, 0.3f, 0.8f)));
 	
-	//-------------SOUND-------------------
-	//-------------------------------------
+	/*******SOUND*********/
 	AudioManager aud;
 	ALuint buff = AudioManager::getBufferSound(DW_SOUND_1);
 	ALuint buff2 = AudioManager::getBufferSound(DW_AMBIENT_1);
@@ -89,7 +90,12 @@ int main()
 	Sound* hpRel = new Sound();
 	Ambient3d* hp2 = new Ambient3d();
 	hp2->setPosition(skyle->getPositionX(), skyle->getPositionY(), 2);
+	AudioManager::playMusic(DW_MUSIC_3);
+	/*AudioStream musicStream;
+	AudioStreamInit(&musicStream);
+	AudioStreamOpen(&musicStream, DW_MUSIC_1);*/
 
+	/*******CONFIG********/
 	bool input_i = false;
 	float player_speed = 3.0f;
 	float player_trans = 1.0f;
@@ -99,16 +105,11 @@ int main()
 	Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 	float lastFrame = 0.0f, deltaTime = 0.0f;
 	bool firstMouse = true;
-	AudioManager::playMusic(DW_MUSIC_3);
-	/*AudioStream musicStream;
-	AudioStreamInit(&musicStream);
-	AudioStreamOpen(&musicStream, DW_MUSIC_1);*/
+	
 	while (!window.closed())
 	{
 		float point_rot = 6.0f;
-		glm::mat4 mat = glm::translate(glm::mat4(1), glm::vec3(point_rot, point_rot, point_rot));
-		mat = mat * glm::rotate(glm::mat4(1), time.elapsed(), glm::vec3(0, 0, 1));
-		mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rot, -point_rot, -point_rot));
+		
 		window.clear();
 		double x, y;
 		InputManager::getMousePosition(x, y);
@@ -117,35 +118,41 @@ int main()
 
 		layer.render();
 		shad.setUniform2f("light_pos", glm::vec2((float)(x * 16.0f / (float)largeur), (float)(9.0f - y * 9.0f / (float)hauteur)));
-		//shad.setUniformMat4("modele_mat", mat);
-		//glm::mat4 projection = glm::ortho(playerCenterX - (16.0f/2)*camera.zoom, playerCenterX + (16.0f/2) * camera.zoom, playerCenterY - (9.0f / 2)*camera.zoom, playerCenterY + (9.0f / 2) * camera.zoom, -1.0f, 1.0f);
-		//glm::mat4 projection = glm::ortho(4.5f, 11.5f, 2.25f, 6.75f, -1.0f, 1.0f);
-		glm::mat4 projection = glm::ortho(
-			(0.0f - (player->getPositionX() + 0.45f)) * camera.getZoom() + (player->getPositionX() + 0.45f),
-			(16.0f - (player->getPositionX() + 0.45f)) * camera.getZoom() + (player->getPositionX() + 0.45f),
-			(0.0f - (player->getPositionY() + 0.5f)) * camera.getZoom() + (player->getPositionY() + 0.5f),
-			(9.0f - (player->getPositionY() + 0.5f)) * camera.getZoom() + (player->getPositionY() + 0.5f),
-			-1.0f, 1.0f);
-		/*std::cout << (0.0f - playerCenterX) * camera.zoom + playerCenterX << " , "
-			<< (16.0f - playerCenterX) * camera.zoom + playerCenterX << " , "
-			<< (0.0f - playerCenterY) * camera.zoom + playerCenterY << " , "
-			<< (9.0f - playerCenterY) * camera.zoom + playerCenterY << std::endl;*/
+
+		/***** TEST ROTATION  ************
+		glm::mat4 mat = glm::translate(glm::mat4(1), glm::vec3(point_rot, point_rot, point_rot));
+		mat = mat * glm::rotate(glm::mat4(1), time.elapsed(), glm::vec3(0, 0, 1));
+		mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rot, -point_rot, -point_rot));
+		shad.setUniformMat4("modele_mat", mat);
+		*****************/
+		
+		
+		/************ CAMERA **************/
+		/****Centrer le zoom sur le heros*****/
 		float playerCenterX = player->getPositionX() - 16.0f / 2 + player->getWidth() / 2;
 		float playerCenterY = player->getPositionY() - 9.0f / 2 + player->getHeight() / 2;
 		if (player->getPositionX() >= 16.0f*camera.getZoom() / 2 && player->getPositionX() <= ((map->getWidth()-0.6) - 16.0f / 2))
 			camera.setPosX(playerCenterX * camera.getZoom());
 		if(player->getPositionY() >= 9.0f*camera.getZoom() / 2 && player->getPositionY() <= ((map->getHeight()-0.6) - 9.0f / 2))
 			camera.setPosY(playerCenterY * camera.getZoom());
-		//camera.setPosition(playerCenterX * camera.getZoom(), playerCenterY * camera.getZoom());
+		
+		glm::mat4 projection = glm::ortho(
+			(0.0f - (player->getPositionX() + 0.45f)) * camera.getZoom() + (player->getPositionX() + 0.45f),
+			(16.0f - (player->getPositionX() + 0.45f)) * camera.getZoom() + (player->getPositionX() + 0.45f),
+			(0.0f - (player->getPositionY() + 0.5f)) * camera.getZoom() + (player->getPositionY() + 0.5f),
+			(9.0f - (player->getPositionY() + 0.5f)) * camera.getZoom() + (player->getPositionY() + 0.5f),
+			-1.0f, 1.0f);
 		shad.setUniformMat4("projection_mat", projection);
+		
+		/**********Bord de map**********/
+		//camera.setPosition(playerCenterX * camera.getZoom(), playerCenterY * camera.getZoom());
 		shad.setUniformMat4("view_mat", camera.getViewMatrix());
-		//Inputs
-		//------------
 
+		/***********INPUTS************/
 		double scrollY = InputManager::getScrollYOffset();
 		if (scrollY != 0)
 		{
-			camera.actZoom((float)scrollY);
+			camera.actionZoom((float)scrollY);
 			//std::cout << "ScrollY = " << scrollY << std::endl;
 		}
 
@@ -248,6 +255,7 @@ int main()
 			frame = 0;
 		}
 	}
+
 	delete textures[0];
 	delete textures[1];
 	return 0;

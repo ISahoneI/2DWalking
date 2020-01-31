@@ -12,7 +12,7 @@
 
 
 
-#define BUFFER_SIZE 4096*8
+#define BUFFER_SIZE 65536*8
 
 class Music
 {

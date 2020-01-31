@@ -10,7 +10,7 @@ Sprite::Sprite(glm::vec3 position, glm::vec2 size, unsigned int color)
 	this->position = position;
 	this->size = size;
 	this->color = color;
-
+	this->texture = NULL;
 	setTexUV();
 }
 
@@ -19,7 +19,7 @@ Sprite::Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4& color)
 	this->position = position;
 	this->size = size;
 	setColor(color);
-
+	this->texture = NULL;
 	setTexUV();
 }
 

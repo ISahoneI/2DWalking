@@ -25,20 +25,20 @@ const glm::mat4 Camera::getViewMatrix() const
 	return glm::lookAt(position, position + Z_axis, Y_axis);
 }
 
-void Camera::actMove(CameraDirection direction, float deltaTime)
+void Camera::actionMove(CameraDirection direction, float deltaTime)
 {
 	float velocity = moveSpeed * deltaTime;
-	if (direction == DOWN)
+	if (direction == CameraDirection::DOWN)
 		position -= Y_axis * velocity;
-	if (direction == UP)
+	if (direction == CameraDirection::UP)
 		position += Y_axis * velocity;
-	if (direction == RIGHT)
+	if (direction == CameraDirection::RIGHT)
 		position += X_axis * velocity;
-	if (direction == LEFT)
+	if (direction == CameraDirection::LEFT)
 		position -= X_axis * velocity;
 }
 
-void Camera::actZoom(float yoffset)
+void Camera::actionZoom(float yoffset)
 {
 	if (zoom >= 0.1f && zoom <= 3.0f)
 		zoom -= yoffset * zoomSpeed;

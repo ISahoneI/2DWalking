@@ -59,7 +59,7 @@ bool Music::open(const char* filename)
 
 bool Music::musicStream(ALuint buffer)
 {
-	ALshort pcm[BUFFER_SIZE];
+	short* pcm = new short[BUFFER_SIZE];
 	int  size = 0;
 	int  result = 0;
 

@@ -1,5 +1,6 @@
 #include "texture.h"
 
+
 Texture::Texture(const std::string& fileName)
 {
 	this->fileName = fileName;
@@ -11,6 +12,7 @@ Texture::~Texture(){}
 GLuint Texture::load()
 {
 	unsigned char* data = FileManager::load_image(this->fileName.c_str(), &this->width, &this->height, &this->nbColor);
+	///TODO (Lancer une exception sinon NullPointer ERROR)
 	if (!data)
 		return NULL;
 	GLuint res;

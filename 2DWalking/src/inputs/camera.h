@@ -4,7 +4,7 @@
 #include <vector>
 
 
-enum CameraDirection {
+enum class CameraDirection {
 	DOWN,
 	UP,
 	RIGHT,
@@ -33,8 +33,8 @@ public:
 
 	const glm::mat4 getViewMatrix() const;
 
-	void actMove(CameraDirection direction, float deltaTime);
-	void actZoom(float yoffset);
+	void actionMove(CameraDirection direction, float deltaTime);
+	void actionZoom(float yoffset);
 
 	void setPosition(glm::vec3 position);
 	void setPosition(float x, float y, float z = 0.0f);
