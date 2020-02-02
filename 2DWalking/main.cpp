@@ -78,8 +78,8 @@ int main()
 	group->add(new Sprite(4, 4, 3, 3, 0x880000ff));
 	group->add(new Sprite(4, 4, 2, 2, glm::vec4(1, 0, 1, 0.4f)));
 	group->add(new Sprite(4, 4, 1, 1, glm::vec4(0, 1, 0, 0.4f)));
-	layer2.add(group);
-	layer2.add(new Sprite(8, 6, 1, 1, ColorManager::getHexaColorf(0.3f, 0.3f, 0.3f, 0.8f)));
+	//layer2.add(group);
+	//layer2.add(new Sprite(8, 6, 1, 1, ColorManager::getHexaColorf(0.3f, 0.3f, 0.3f, 0.8f)));
 	
 	/*******SOUND*********/
 	AudioManager aud;
@@ -97,20 +97,17 @@ int main()
 
 	/*******CONFIG********/
 	bool input_i = false;
-	float player_speed = 3.0f;
+	float player_speed = 0.005f;
 	float player_trans = 1.0f;
-	Timer time;
-	float timer = 0;
-	unsigned int frame = 0;
 	Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
-	float lastFrame = 0.0f, deltaTime = 0.0f;
-	bool firstMouse = true;
-	
+
+	Timer time;
 	while (!window.closed())
 	{
-		float point_rot = 6.0f;
 		
 		window.clear();
+		time.initFrameIteration(glfwGetTime());
+
 		double x, y;
 		InputManager::getMousePosition(x, y);
 		int largeur, hauteur;
@@ -120,12 +117,12 @@ int main()
 		shad.setUniform2f("light_pos", glm::vec2((float)(x * 16.0f / (float)largeur), (float)(9.0f - y * 9.0f / (float)hauteur)));
 
 		/***** TEST ROTATION  ************
+		float point_rot = 6.0f;
 		glm::mat4 mat = glm::translate(glm::mat4(1), glm::vec3(point_rot, point_rot, point_rot));
 		mat = mat * glm::rotate(glm::mat4(1), time.elapsed(), glm::vec3(0, 0, 1));
 		mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rot, -point_rot, -point_rot));
 		shad.setUniformMat4("modele_mat", mat);
 		*****************/
-		
 		
 		/************ CAMERA **************/
 		/****Centrer le zoom sur le heros*****/
@@ -158,42 +155,38 @@ int main()
 
 		if (InputManager::isKeyPressed(GLFW_KEY_ESCAPE))
 			window.close();
-		float currentFrame = (float)glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
 		if (InputManager::isKeyPressed(GLFW_KEY_RIGHT) || InputManager::isKeyPressed(GLFW_KEY_D))
 		{
 			player->setTexture(yzao_tex[2]);
 			if(player->getPositionX() < (map->getWidth() - 0.8f))
-				player->setPositionX(player->getPositionX() + deltaTime * player_speed);
-			//camera.ProcessKeyboard(CameraDirection::RIGHT, deltaTime);
+				player->setPositionX(player->getPositionX() +  player_speed);
 		}
 		if (InputManager::isKeyPressed(GLFW_KEY_LEFT) || InputManager::isKeyPressed(GLFW_KEY_A))
 		{
 			player->setTexture(yzao_tex[3]);
 			if(player->getPositionX() > 0.2f)
-				player->setPositionX(player->getPositionX() - deltaTime * player_speed);
-			//camera.ProcessKeyboard(CameraDirection::LEFT, deltaTime);
+				player->setPositionX(player->getPositionX() - player_speed);
 		}
 		if (InputManager::isKeyPressed(GLFW_KEY_DOWN) || InputManager::isKeyPressed(GLFW_KEY_S))
 		{
 			player->setTexture(yzao_tex[0]);
 			if(player->getPositionY() > 0.4f)
-				player->setPositionY(player->getPositionY() - deltaTime * player_speed);
-			//camera.ProcessKeyboard(CameraDirection::BACKWARD, deltaTime);
+				player->setPositionY(player->getPositionY() -  player_speed);
 		}
 		if (InputManager::isKeyPressed(GLFW_KEY_UP) || InputManager::isKeyPressed(GLFW_KEY_W))
 		{
 			player->setTexture(yzao_tex[1]);
 			if(player->getPositionY() < (map->getHeight() - 0.8f))
-				player->setPositionY(player->getPositionY() + deltaTime * player_speed);
-			//camera.ProcessKeyboard(CameraDirection::FORWARD, deltaTime);
+				player->setPositionY(player->getPositionY() +  player_speed);
 		}
 		if (InputManager::isKeyPressed(GLFW_KEY_X))
-			player_speed += 0.1f;
+			player_speed += 0.00008f;
 		if (InputManager::isKeyPressed(GLFW_KEY_Z))
-			player_speed -= 0.1f;
+			player_speed -= 0.00008f;
 		
+		if (InputManager::isKeyPressed(GLFW_KEY_H))
+			time.setFpsLimit(30.0);
+
 		if (InputManager::isKeyPressed(GLFW_KEY_SPACE))
 		{
 			player->setPosition(0.0f, 0.0f, 1.0f);
@@ -237,23 +230,31 @@ int main()
 
 		if (InputManager::isKeyPressed(GLFW_KEY_M))
 			AudioManager::stopMusic();
-
+		
 		AudioManager::updateMusic();
 		layer2.render();
 		//shad2.setUniformMat4("modele_mat", mat);
 		//shad2.setUniform2f("light_pos", glm::vec2(4.0f, 3.5f));
 
-		window.update();
-		frame++;
-		if (time.elapsed() - timer > 1.0f)
+
+		if(time.fpsPassed())
 		{
-			timer += 1.0f;
-			printf("Window : %d x %d \n", window.getWidth(), window.getHeight());
-			printf("Player position : X:%f   Y:%f \n", player->getPositionX(), player->getPositionY());
-			printf("DeltaTime : %f \n", deltaTime);
-			printf("%d fps\n", frame);
-			frame = 0;
+			window.update();
+
+
+			if(time.oneSecondPassed())
+			{
+				printf("Window : %d x %d \n", window.getWidth(), window.getHeight());
+				printf("Player position : X:%f   Y:%f \n", player->getPositionX(), player->getPositionY());
+				printf("DeltaTime : %lf \n", time.getDeltaTime());
+				printf("%d fps\n", time.getFps());
+
+
+				time.resetFps();
+			}
 		}
+		time.resetUpdateTime();
+		
 	}
 
 	delete textures[0];
