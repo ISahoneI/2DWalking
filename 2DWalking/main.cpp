@@ -8,6 +8,8 @@
 #include "src/graphics/rendering/renderer2d.h"
 #include "src/graphics/paints/sprite.h"
 
+#include "src/objects/boxs/colliderbox.h"
+
 #include "src/graphics/layers/layer.h"
 #include "src/graphics/layers/group.h"
 
@@ -28,7 +30,7 @@ int main()
 	Window window("2D Walking", 854, 480, false);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	//srand((unsigned int)time(NULL));
 	//glm::mat4 ort = glm::ortho(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
 	
@@ -59,6 +61,7 @@ int main()
 	Sprite* skyle = new Sprite(12, 8, 0.6f * 24 / 16, 0.6f * 32 / 16, new Texture("res/textures/skyle_bas.png"));
 	layer.add(skyle);
 	layer.add(player);
+	layer.add(new Colliderbox());
 
 	Sprite* brouillard = new Sprite(0, 0, 16, 9, new Texture("res/textures/brouillard_bleu.png"), ColorManager::getHexaColori(255, 255, 255, 70));
 	layer2.add(brouillard);
@@ -97,7 +100,7 @@ int main()
 
 	/*******CONFIG********/
 	bool input_i = false;
-	float player_speed = 0.005f;
+	float player_speed = 3.0f;
 	float player_trans = 1.0f;
 	Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -155,37 +158,20 @@ int main()
 
 		if (InputManager::isKeyPressed(GLFW_KEY_ESCAPE))
 			window.close();
-		if (InputManager::isKeyPressed(GLFW_KEY_RIGHT) || InputManager::isKeyPressed(GLFW_KEY_D))
-		{
-			player->setTexture(yzao_tex[2]);
-			if(player->getPositionX() < (map->getWidth() - 0.8f))
-				player->setPositionX(player->getPositionX() +  player_speed);
-		}
-		if (InputManager::isKeyPressed(GLFW_KEY_LEFT) || InputManager::isKeyPressed(GLFW_KEY_A))
-		{
-			player->setTexture(yzao_tex[3]);
-			if(player->getPositionX() > 0.2f)
-				player->setPositionX(player->getPositionX() - player_speed);
-		}
-		if (InputManager::isKeyPressed(GLFW_KEY_DOWN) || InputManager::isKeyPressed(GLFW_KEY_S))
-		{
-			player->setTexture(yzao_tex[0]);
-			if(player->getPositionY() > 0.4f)
-				player->setPositionY(player->getPositionY() -  player_speed);
-		}
-		if (InputManager::isKeyPressed(GLFW_KEY_UP) || InputManager::isKeyPressed(GLFW_KEY_W))
-		{
-			player->setTexture(yzao_tex[1]);
-			if(player->getPositionY() < (map->getHeight() - 0.8f))
-				player->setPositionY(player->getPositionY() +  player_speed);
-		}
-		if (InputManager::isKeyPressed(GLFW_KEY_X))
-			player_speed += 0.00008f;
-		if (InputManager::isKeyPressed(GLFW_KEY_Z))
-			player_speed -= 0.00008f;
 		
-		if (InputManager::isKeyPressed(GLFW_KEY_H))
-			time.setFpsLimit(30.0);
+		
+		if (InputManager::isKeyPressedOnce(GLFW_KEY_G)) {
+			time.setFpsLimit(250);
+		}
+		if (InputManager::isKeyPressedOnce(GLFW_KEY_H)) {
+			time.setFpsLimit(60);
+		}
+		if (InputManager::isKeyPressedOnce(GLFW_KEY_B)) {
+			time.setFpsLimit(30);
+		}
+		if (InputManager::isKeyPressedOnce(GLFW_KEY_N)) {
+			time.setFpsLimit(20);
+		}
 
 		if (InputManager::isKeyPressed(GLFW_KEY_SPACE))
 		{
@@ -239,6 +225,36 @@ int main()
 
 		if(time.fpsPassed())
 		{
+			if (InputManager::isKeyPressed(GLFW_KEY_RIGHT) || InputManager::isKeyPressed(GLFW_KEY_D))
+			{
+				player->setTexture(yzao_tex[2]);
+				if (player->getPositionX() < (map->getWidth() - 0.8f))
+					player->setPositionX(player->getPositionX() + player_speed * (float)time.getDeltaTime());
+			}
+			if (InputManager::isKeyPressed(GLFW_KEY_LEFT) || InputManager::isKeyPressed(GLFW_KEY_A))
+			{
+				player->setTexture(yzao_tex[3]);
+				if (player->getPositionX() > 0.2f)
+					player->setPositionX(player->getPositionX() - player_speed * (float)time.getDeltaTime());
+			}
+			if (InputManager::isKeyPressed(GLFW_KEY_DOWN) || InputManager::isKeyPressed(GLFW_KEY_S))
+			{
+				player->setTexture(yzao_tex[0]);
+				if (player->getPositionY() > 0.4f)
+					player->setPositionY(player->getPositionY() - player_speed * (float)time.getDeltaTime());
+			}
+			if (InputManager::isKeyPressed(GLFW_KEY_UP) || InputManager::isKeyPressed(GLFW_KEY_W))
+			{
+				player->setTexture(yzao_tex[1]);
+				if (player->getPositionY() < (map->getHeight() - 0.8f))
+					player->setPositionY(player->getPositionY() + player_speed * (float)time.getDeltaTime());
+			}
+
+			if (InputManager::isKeyPressed(GLFW_KEY_X))
+				player_speed += 0.1f;
+			if (InputManager::isKeyPressed(GLFW_KEY_Z))
+				player_speed -= 0.1f;
+
 			window.update();
 
 

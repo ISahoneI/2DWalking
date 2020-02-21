@@ -13,7 +13,7 @@ private:
 	float currentTime = 0.0f;
 
 	///FPS Limiter
-	double fpsLimit = 1.0 / 250.0;
+	double fpsLimit = 1.0 / 300.0;
 	unsigned int fps = 0;
 	double lastFrameTime = 0.0;
 	double lastUpdateTime = 0.0;

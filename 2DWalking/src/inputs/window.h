@@ -27,7 +27,7 @@ public:
 	 int getHeight() const { return height; }
 	 InputManager* getInputManager() const{ return inputManager; }
 
-	//Callbacks
+	///Callbacks
 	static void window_size_callback(GLFWwindow* window, int width, int height);
 	static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);

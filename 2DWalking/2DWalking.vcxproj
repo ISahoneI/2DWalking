@@ -36,6 +36,9 @@
     <ClCompile Include="src\inputs\inputmanager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\inputs\window.cpp" />
+    <ClCompile Include="src\objects\boxs\colliderbox.cpp" />
+    <ClCompile Include="src\objects\boxs\hitbox.cpp" />
+    <ClCompile Include="src\objects\boxs\hurtbox.cpp" />
     <ClCompile Include="src\utilities\stb_image.cpp" />
     <ClCompile Include="src\utilities\stb_vorbis.c" />
   </ItemGroup>
@@ -60,6 +63,9 @@
     <ClInclude Include="src\inputs\camera.h" />
     <ClInclude Include="src\inputs\inputmanager.h" />
     <ClInclude Include="src\inputs\window.h" />
+    <ClInclude Include="src\objects\boxs\colliderbox.h" />
+    <ClInclude Include="src\objects\boxs\hitbox.h" />
+    <ClInclude Include="src\objects\boxs\hurtbox.h" />
     <ClInclude Include="src\utilities\filemanager.h" />
     <ClInclude Include="src\utilities\mathmanager.h" />
     <ClInclude Include="src\utilities\stb_vorbis.h" />
