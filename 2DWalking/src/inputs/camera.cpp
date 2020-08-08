@@ -18,7 +18,7 @@ Camera::Camera(float posX, float posY, float posZ, float moveSpeed, float zoomSp
 	initAxis();
 }
 
-Camera::~Camera(){}
+Camera::~Camera() {}
 
 const glm::mat4 Camera::getViewMatrix() const
 {

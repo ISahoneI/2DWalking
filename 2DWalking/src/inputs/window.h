@@ -9,13 +9,14 @@
 class Window
 {
 private:
-	const char *title;
+	const char* title;
 	int width, height;
 	bool is_closed, is_fullscreen;
-	GLFWwindow *window;
-	InputManager *inputManager;
+	GLFWwindow* window;
+	InputManager* inputManager;
+
 public:
-	Window(const char *title, int width, int height, bool is_fullscreen);
+	Window(const char* title, int width, int height, bool is_fullscreen);
 	~Window();
 	void update();
 	void clear();
@@ -23,16 +24,22 @@ public:
 	bool closed();
 
 	void getDimension(int& width, int& height);
-	 int getWidth() const { return width; }
-	 int getHeight() const { return height; }
-	 InputManager* getInputManager() const{ return inputManager; }
+	int getWidth() const { return width; }
+	int getHeight() const { return height; }
+	InputManager* getInputManager() const { return inputManager; }
+
+
+
 
 	///Callbacks
 	static void window_size_callback(GLFWwindow* window, int width, int height);
-	static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+
 private:
 	bool init();
+	void gamepad_update();
+
 };

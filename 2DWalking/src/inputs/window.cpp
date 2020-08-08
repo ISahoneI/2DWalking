@@ -1,6 +1,6 @@
 #include "window.h"
 
-Window::Window(const char * title, int width, int height, bool is_fullscreen)
+Window::Window(const char* title, int width, int height, bool is_fullscreen)
 {
 	this->title = title;
 	this->width = width;
@@ -24,6 +24,7 @@ void Window::clear()
 void Window::update()
 {
 	glfwPollEvents();
+	gamepad_update();
 	glfwGetFramebufferSize(window, &width, &height);
 	glfwSwapBuffers(window);
 }
@@ -69,6 +70,7 @@ bool Window::init()
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetCursorPosCallback(window, cursor_position_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+
 	glfwSwapInterval(0);
 	if (glewInit() != GLEW_OK)
 	{
@@ -83,7 +85,8 @@ bool Window::init()
 	return true;
 }
 
-void Window::window_size_callback(GLFWwindow * window, int width, int height)
+
+void Window::window_size_callback(GLFWwindow* window, int width, int height)
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->width = width;
@@ -91,7 +94,7 @@ void Window::window_size_callback(GLFWwindow * window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void Window::key_callback(GLFWwindow * window, int key, int scancode, int action, int mods)
+void Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->getInputManager()->setKey(key, action != GLFW_RELEASE);
@@ -121,24 +124,38 @@ void Window::key_callback(GLFWwindow * window, int key, int scancode, int action
 	}
 }
 
-void Window::mouse_button_callback(GLFWwindow * window, int button, int action, int mods)
+void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->getInputManager()->setMouseButton(button, action != GLFW_RELEASE);
 }
 
-void Window::scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
+void Window::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->getInputManager()->setScroll(xoffset, yoffset);
 }
 
 
-
-void Window::cursor_position_callback(GLFWwindow * window, double xpos, double ypos)
+void Window::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	Window* win = (Window*)glfwGetWindowUserPointer(window);
 	win->getInputManager()->setMousePosX(xpos);
 	win->getInputManager()->setMousePosY(ypos);
 }
 
+
+void Window::gamepad_update()
+{
+	const char* gamepadName = glfwGetJoystickName(GLFW_JOYSTICK_1);
+	if (gamepadName) {
+		int axesNumber;
+		const float* gamepadJoystick = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axesNumber);
+
+		int buttonNumber;
+		const bool* gamepadButtons = (const bool*)glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonNumber);
+
+		Window* win = (Window*)glfwGetWindowUserPointer(window);
+		win->getInputManager()->setGamepad(gamepadName, gamepadJoystick, axesNumber, gamepadButtons, buttonNumber);
+	}
+}

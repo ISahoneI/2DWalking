@@ -44,9 +44,9 @@ public:
 	void setZoomSpeed(float zoomSpeed);
 	void setZoom(float zoom);
 
-	 const float getPosX() const { return this->position.x; }
-	 const float getPosY() const { return this->position.y; }
-	 const float getZoom() const { return this->zoom; }
+	const float getPosX() const { return this->position.x; }
+	const float getPosY() const { return this->position.y; }
+	const float getZoom() const { return this->zoom; }
 
 private:
 	void initAxis();

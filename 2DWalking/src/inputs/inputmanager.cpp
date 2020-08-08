@@ -7,8 +7,13 @@ double InputManager::mousePosY;
 double InputManager::scrollX;
 double InputManager::scrollY;
 
+std::string InputManager::gamepadName;
+bool InputManager::gamepadButtons[MAX_GBUTTONS];
+float InputManager::gamepadAxes[MAX_GAXES];
+
 bool InputManager::inputKeys[MAX_KEYS];
 bool InputManager::inputMouseButtons[MAX_MBUTTONS];
+bool InputManager::inputGamepadButtons[MAX_GBUTTONS];
 
 InputManager::InputManager()
 {
@@ -16,12 +21,14 @@ InputManager::InputManager()
 	setAllMouseButtons(false);
 	mousePosX = 0, mousePosY = 0;
 	scrollX = 0, scrollY = 0;
+	setAllGamepadButtons(false);
+	setAllGamepadAxes(0.0f);
 }
-InputManager::~InputManager(){}
+InputManager::~InputManager() {}
 
 bool InputManager::isKeyPressed(unsigned int keycode)
 {
-	if(keycode >= MAX_KEYS)
+	if (keycode >= MAX_KEYS)
 		return false;
 	return keys[keycode];
 }
@@ -75,6 +82,43 @@ bool InputManager::isMouseButtonPressedOnce(unsigned int buttoncode)
 	return false;
 }
 
+bool InputManager::isGamepadButtonPressed(unsigned int buttoncode)
+{
+	if (buttoncode >= MAX_GBUTTONS)
+		return false;
+	return gamepadButtons[buttoncode];
+}
+
+bool InputManager::isGamepadButtonPressedOnce(unsigned int buttoncode)
+{
+	if (inputGamepadButtons[buttoncode] == false)
+	{
+		if (isGamepadButtonPressed(buttoncode))
+		{
+			inputGamepadButtons[buttoncode] = true;
+			return true;
+		}
+	}
+	else
+	{
+		if (!isGamepadButtonPressed(buttoncode))
+		{
+			inputGamepadButtons[buttoncode] = false;
+			return false;
+		}
+	}
+	return false;
+}
+
+float InputManager::gamepadJoystickValue(unsigned int axesCode)
+{
+	if (axesCode >= MAX_GAXES)
+		return false;
+	return gamepadAxes[axesCode];
+}
+
+
+
 void InputManager::setKey(int keycode, bool val)
 {
 	keys[keycode] = val;
@@ -102,6 +146,52 @@ void InputManager::setAllMouseButtons(bool val)
 		inputMouseButtons[i] = false;
 	}
 }
+
+
+void InputManager::setGamepad(const char* gamepadName, const float* joysticks, const int axesNumber, const bool* buttons, const int numberOfButtons)
+{
+	InputManager::gamepadName = gamepadName;
+
+	for (int i = 0; i < axesNumber; i++) {
+		gamepadAxes[i] = joysticks[i];
+	}
+
+	for (int i = 0; i < numberOfButtons; i++) {
+		gamepadButtons[i] = buttons[i];
+	}
+}
+
+
+void InputManager::setGamepadButton(int buttoncode, bool val)
+{
+	gamepadButtons[buttoncode] = val;
+}
+
+
+void InputManager::setAllGamepadButtons(bool val)
+{
+	for (int i = 0; i < MAX_GBUTTONS; i++)
+	{
+		gamepadButtons[i] = val;
+		inputGamepadButtons[i] = false;
+	}
+}
+
+
+void InputManager::setAllGamepadAxes(float val)
+{
+	for (int i = 0; i < MAX_GAXES; i++)
+	{
+		gamepadAxes[i] = val;
+	}
+}
+
+
+std::string InputManager::getGamepadName()
+{
+	return InputManager::gamepadName;
+}
+
 
 void InputManager::setScroll(double xoffset, double yoffset)
 {
