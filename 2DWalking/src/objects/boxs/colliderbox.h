@@ -11,5 +11,6 @@ public:
 	Colliderbox();
 	~Colliderbox();
 
+	bool isCollided(const Colliderbox* target);
 
 };

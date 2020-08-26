@@ -2,6 +2,7 @@
 
 Sprite::Sprite()
 {
+	this->texture = NULL;
 	setTexUV();
 }
 
@@ -28,20 +29,20 @@ Sprite::Sprite(float x, float y, float width, float height, unsigned int color)
 {
 }
 
-Sprite::Sprite(float x, float y, float width, float height, const glm::vec4 & color)
+Sprite::Sprite(float x, float y, float width, float height, const glm::vec4& color)
 	: Sprite(glm::vec3(x, y, 0), glm::vec2(width, height), color)
 {
 }
 
-Sprite::Sprite(float x, float y, float width, float height, Texture * texture, unsigned int color)
+Sprite::Sprite(float x, float y, float width, float height, Texture* texture, unsigned int color)
 	: Sprite(glm::vec3(x, y, 0), glm::vec2(width, height), color)
 {
 	this->texture = texture;
 }
 
-Sprite::~Sprite(){}
+Sprite::~Sprite() {}
 
-void Sprite::submit(Renderer * renderer) const
+void Sprite::submit(Renderer* renderer) const
 {
 	renderer->submit(this);
 }

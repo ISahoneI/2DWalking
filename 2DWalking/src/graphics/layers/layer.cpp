@@ -19,7 +19,7 @@ Layer::Layer(Renderer2D* renderer, Shader* shader, glm::mat4 projection)
 	this->shader->disable();
 }
 
-Layer::Layer(Shader * shader)
+Layer::Layer(Shader* shader)
 	: Layer(new Renderer2D(), shader, glm::ortho(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f))
 {
 
@@ -33,7 +33,7 @@ Layer::~Layer()
 		delete this->renderables[i];
 }
 
-void Layer::add(Sprite * renderable)
+void Layer::add(Sprite* renderable)
 {
 	this->renderables.push_back(renderable);
 }
@@ -41,11 +41,11 @@ void Layer::add(Sprite * renderable)
 void Layer::render()
 {
 	this->shader->enable();
-	
+
 	this->renderer->begin();
 	for (const Sprite* renderable : this->renderables)
 		renderable->submit(this->renderer);
-		//this->renderer->submit(renderable);
+	//this->renderer->submit(renderable);
 
 	this->renderer->end();
 	this->renderer->flush();

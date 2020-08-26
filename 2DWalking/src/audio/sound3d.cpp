@@ -5,9 +5,9 @@ Sound3d::Sound3d() : Sound()
 	posX = 0.0; posY = 0.0; posZ = 0.0;
 
 	alSourcei(this->id, AL_SOURCE_RELATIVE, AL_FALSE);
-	alSourcef(this->id, AL_ROLLOFF_FACTOR, 1.2f);
-	alSourcef(this->id, AL_REFERENCE_DISTANCE, 1);
-	alSourcef(this->id, AL_MAX_DISTANCE, 20);
+	alSourcef(this->id, AL_ROLLOFF_FACTOR, 1.0f);
+	alSourcef(this->id, AL_REFERENCE_DISTANCE, 100.0f);
+	alSourcef(this->id, AL_MAX_DISTANCE, 500.0f);
 	alSource3f(this->id, AL_POSITION, this->posX, this->posY, this->posZ);
 }
 

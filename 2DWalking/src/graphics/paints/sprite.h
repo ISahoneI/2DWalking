@@ -32,10 +32,14 @@ public:
 	void setPositionY(float y) { this->position.y = y; }
 	void setPositionZ(float z) { this->position.z = z; }
 
+	void setSize(float width, float height) { this->size = glm::vec2(width, height); }
+	void setWidth(float width) { this->size.x = width; }
+	void setHeight(float height) { this->size.x = height; }
+
 	void setColor(unsigned int color) { this->color = color; }
-	void setColor(unsigned int r, unsigned int g, unsigned int b, unsigned int a){ this->color = ColorManager::getHexaColori(r, g, b, a); }
-	void setColor(float r, float g, float b, float a){ this->color = ColorManager::getHexaColorf(r, g, b, a); }
-	void setColor(const glm::vec4& color){ this->color = ColorManager::getHexaColorf(color.x, color.y, color.z, color.w); }
+	void setColor(unsigned int r, unsigned int g, unsigned int b, unsigned int a) { this->color = ColorManager::getHexaColori(r, g, b, a); }
+	void setColor(float r, float g, float b, float a) { this->color = ColorManager::getHexaColorf(r, g, b, a); }
+	void setColor(const glm::vec4& color) { this->color = ColorManager::getHexaColorf(color.x, color.y, color.z, color.w); }
 
 	void setTransparency(float alpha);
 
