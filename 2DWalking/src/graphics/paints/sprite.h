@@ -10,17 +10,19 @@ class Sprite
 protected:
 	glm::vec3 position;
 	glm::vec2 size;
+	glm::vec4 colorParameters;
 	unsigned int color;
 	std::vector<glm::vec2> uv;
 	Texture* texture;
 
 public:
 	Sprite();
-	Sprite(glm::vec3 position, glm::vec2 size, unsigned int color);
-	Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4& color);
-	Sprite(float x, float y, float width, float height, unsigned int color = 0xffffffff);
-	Sprite(float x, float y, float width, float height, const glm::vec4& color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	Sprite(float x, float y, float width, float height, Texture* texture, unsigned int color = 0xffffffff);
+	//Sprite(glm::vec3 position, glm::vec2 size, unsigned int color);
+	Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4 color);
+	//Sprite(float x, float y, float width, float height, unsigned int color = 0xffffffff);
+	Sprite(float x, float y, float width, float height, const glm::vec4 color = glm::vec4(255, 255, 255, 255));
+	//Sprite(float x, float y, float width, float height, Texture* texture, unsigned int color = 0xffffffff);
+	Sprite(float x, float y, float width, float height, Texture* texture, const glm::vec4 color = glm::vec4(255, 255, 255, 255));
 
 	virtual ~Sprite();
 
@@ -34,14 +36,15 @@ public:
 
 	void setSize(float width, float height) { this->size = glm::vec2(width, height); }
 	void setWidth(float width) { this->size.x = width; }
-	void setHeight(float height) { this->size.x = height; }
+	void setHeight(float height) { this->size.y = height; }
 
-	void setColor(unsigned int color) { this->color = color; }
-	void setColor(unsigned int r, unsigned int g, unsigned int b, unsigned int a) { this->color = ColorManager::getHexaColori(r, g, b, a); }
-	void setColor(float r, float g, float b, float a) { this->color = ColorManager::getHexaColorf(r, g, b, a); }
-	void setColor(const glm::vec4& color) { this->color = ColorManager::getHexaColorf(color.x, color.y, color.z, color.w); }
-
+	void setColor(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
+	void setColor(const glm::vec4 color);
+	void setColorRed(unsigned int r);
+	void setColorGreen(unsigned int g);
+	void setColorBlue(unsigned int b);
 	void setTransparency(float alpha);
+
 
 	void setTexture(Texture* tex) { this->texture = tex; }
 
@@ -55,6 +58,7 @@ public:
 	const float getWidth() const { return size.x; }
 	const float getHeight() const { return size.y; }
 	const unsigned int getColor() const { return color; }
+	const glm::vec4 getColorParameters() const { return colorParameters; }
 	const std::vector<glm::vec2>& getUV() const { return this->uv; }
 	const GLuint getTID() const { return this->texture == nullptr ? false : this->texture->getID(); }
 

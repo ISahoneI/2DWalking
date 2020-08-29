@@ -50,17 +50,27 @@ int main()
 	float tilescale = 1.0f;
 
 
-	Sprite* map = new Sprite(0.0f, 0.0f, 800.0f, 1680.0f, new Texture("res/textures/Omara.png"), ColorManager::getHexaColori(255, 255, 255, 255));
+	Sprite* map = new Sprite(0.0f, 0.0f, 800.0f, 1680.0f, new Texture("res/textures/Omara.png"), glm::vec4(255, 255, 255, 255));
 	layer.add(map);
 	Chara* player = new Chara();
 	Sprite* skyle = new Sprite(12, 8, 24, 32, new Texture("res/textures/skyle_bas.png"));
 	layer.add(skyle);
 	layer.add(player);
+	layer.add(player->colliderbox);
+	//layer.add(player->Xcolliderbox);
+	//layer.add(player->Ycolliderbox);
+
 	layer.add(new Sprite());
 	Colliderbox* colliderTest = new Colliderbox();
+	colliderTest->setSize(176, 96);
+	colliderTest->setPosition(96, 144);
 	layer.add(colliderTest);
+	Colliderbox* colliderBordDown = new Colliderbox();
+	colliderBordDown->setPosition(-16, -16);
+	colliderBordDown->setSize(816, 16);
+	layer.add(colliderBordDown);
 
-	Sprite* brouillard = new Sprite(0, 0, 16, 9, new Texture("res/textures/brouillard_bleu.png"), ColorManager::getHexaColori(255, 255, 255, 70));
+	Sprite* brouillard = new Sprite(0, 0, 16, 9, new Texture("res/textures/brouillard_bleu.png"), glm::vec4(255, 255, 255, 70));
 	layer2.add(brouillard);
 
 	/******TEST AJOUT DE VRAI SPRITE AVEC TEXTURE******/
@@ -74,10 +84,10 @@ int main()
 
 	/***TEST GROUPE DE SPRITE SANS TEXTURE***/
 	Group* group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(4, 4, 0)));
-	group->add(new Sprite(4, 4, 4, 4, glm::vec4(1, 1, 0, 0.4f)));
-	group->add(new Sprite(4, 4, 3, 3, 0x880000ff));
-	group->add(new Sprite(4, 4, 2, 2, glm::vec4(1, 0, 1, 0.4f)));
-	group->add(new Sprite(4, 4, 1, 1, glm::vec4(0, 1, 0, 0.4f)));
+	group->add(new Sprite(4, 4, 4, 4, glm::vec4(255, 255, 0, 102)));
+	group->add(new Sprite(4, 4, 3, 3, glm::vec4(0, 0, 255, 128)));
+	group->add(new Sprite(4, 4, 2, 2, glm::vec4(255, 0, 255, 102)));
+	group->add(new Sprite(4, 4, 1, 1, glm::vec4(0, 255, 0, 102)));
 	//layer2.add(group);
 	//layer2.add(new Sprite(8, 6, 1, 1, ColorManager::getHexaColorf(0.3f, 0.3f, 0.3f, 0.8f)));
 
@@ -90,69 +100,73 @@ int main()
 	Sound* hpRel = new Sound();
 	Ambient3d* hp2 = new Ambient3d();
 	hp2->setPosition(skyle->getPositionX(), skyle->getPositionY(), 100);
-	AudioManager::playMusic(DW_MUSIC_3);
+	//AudioManager::playMusic(DW_MUSIC_3);
 	/*AudioStream musicStream;
 	AudioStreamInit(&musicStream);
 	AudioStreamOpen(&musicStream, DW_MUSIC_1);*/
 
 	/*******CONFIG********/
 	bool input_i = false;
-	float player_speed = 100.0f;
+	float player_speed = 200.0f;
 	float player_trans = 1.0f;
 	float deplacement = 0.0f;
 	Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	float xdir = 0.0f;
+	float ydir = 0.0f;
 
 	Timer time;
 	while (!window.closed())
 	{
 		time.initFrameIteration(glfwGetTime());
+		window.clear();
+		double x, y;
+		InputManager::getMousePosition(x, y);
+		int largeur, hauteur;
+		window.getDimension(largeur, hauteur);
+
+		layer.render();
+		shad.setUniform2f("light_pos", glm::vec2((float)(x * 16.0f / (float)largeur), (float)(9.0f - y * 9.0f / (float)hauteur)));
+
+		/***** TEST ROTATION  ************
+		float point_rot = 6.0f;
+		glm::mat4 mat = glm::translate(glm::mat4(1), glm::vec3(point_rot, point_rot, point_rot));
+		mat = mat * glm::rotate(glm::mat4(1), time.elapsed(), glm::vec3(0, 0, 1));
+		mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rot, -point_rot, -point_rot));
+		shad.setUniformMat4("modele_mat", mat);
+		*****************/
+
+		/************ CAMERA **************/
+		/****Centrer le zoom sur le heros*****/
+		float playerCenterX = player->getPositionX() - (427.0f / 2.0f) + (player->getWidth() / 2.0f);
+		float playerCenterY = player->getPositionY() - (240.0f / 2.0f) + (player->getHeight() / 2.0f);
+		//if (player->getPositionX() >= ((camera.getZoom() * 427.0f - player->getWidth())) / 2.0f && player->getPositionX() <= map->getWidth() - ((camera.getZoom() * 427.0f + player->getWidth())) / 2.0f)
+		camera.setPosX(playerCenterX * camera.getZoom());
+		//if (player->getPositionY() >= ((camera.getZoom() * 240.0f - player->getHeight())) / 2.0f && player->getPositionY() <= map->getHeight() - ((camera.getZoom() * 240.0f + player->getHeight())) / 2.0f)
+		camera.setPosY(playerCenterY * camera.getZoom());
+
+		glm::mat4 projection = glm::ortho(
+			camera.getZoom() * (0.0f - (player->getPositionX() + 16.0f)) + player->getPositionX() + 16.0f,
+			camera.getZoom() * (427.0f - (player->getPositionX() + 16.0f)) + player->getPositionX() + 16.0f,
+			camera.getZoom() * (0.0f - (player->getPositionY() + 12.0f)) + player->getPositionY() + 12.0f,
+			camera.getZoom() * (240.0f - (player->getPositionY() + 12.0f)) + player->getPositionY() + 12.0f,
+			-1.0f,
+			1.0f
+		);
+		shad.setUniformMat4("projection_mat", projection);
+
+		/**********Bord de map**********/
+		//camera.setPosition(playerCenterX * camera.getZoom(), playerCenterY * camera.getZoom());
+		shad.setUniformMat4("view_mat", camera.getViewMatrix());
+
+
+		layer2.render();
+		//shad2.setUniformMat4("modele_mat", mat);
+		//shad2.setUniform2f("light_pos", glm::vec2(4.0f, 3.5f));
+
 		if (time.fpsPassed())
 		{
-			window.clear();
-			double x, y;
-			InputManager::getMousePosition(x, y);
-			int largeur, hauteur;
-			window.getDimension(largeur, hauteur);
-
-			layer.render();
-			shad.setUniform2f("light_pos", glm::vec2((float)(x * 16.0f / (float)largeur), (float)(9.0f - y * 9.0f / (float)hauteur)));
-
-			/***** TEST ROTATION  ************
-			float point_rot = 6.0f;
-			glm::mat4 mat = glm::translate(glm::mat4(1), glm::vec3(point_rot, point_rot, point_rot));
-			mat = mat * glm::rotate(glm::mat4(1), time.elapsed(), glm::vec3(0, 0, 1));
-			mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rot, -point_rot, -point_rot));
-			shad.setUniformMat4("modele_mat", mat);
-			*****************/
-
-			/************ CAMERA **************/
-			/****Centrer le zoom sur le heros*****/
-			float playerCenterX = player->getPositionX() - 427.0f / 2 + player->getWidth() / 2;
-			float playerCenterY = player->getPositionY() - 240.0f / 2 + player->getHeight() / 2;
-			//if (player->getPositionX() >= 16.0f * camera.getZoom() / 2 && player->getPositionX() <= ((map->getWidth() - 0.6) - 16.0f / 2))
-			camera.setPosX(playerCenterX * camera.getZoom());
-			//if (player->getPositionY() >= 9.0f * camera.getZoom() / 2 && player->getPositionY() <= ((map->getHeight() - 0.6) - 9.0f / 2))
-			camera.setPosY(playerCenterY * camera.getZoom());
-
-			glm::mat4 projection = glm::ortho(
-				camera.getZoom() * (0.0f - (player->getPositionX() + 16.0f)) + player->getPositionX() + 16.0f,
-				camera.getZoom() * (427.0f - (player->getPositionX() + 16.0f)) + player->getPositionX() + 16.0f,
-				camera.getZoom() * (0.0f - (player->getPositionY() + 12.0f)) + player->getPositionY() + 12.0f,
-				camera.getZoom() * (240.0f - (player->getPositionY() + 12.0f)) + player->getPositionY() + 12.0f,
-				-1.0f,
-				1.0f
-			);
-			shad.setUniformMat4("projection_mat", projection);
-
-			/**********Bord de map**********/
-			//camera.setPosition(playerCenterX * camera.getZoom(), playerCenterY * camera.getZoom());
-			shad.setUniformMat4("view_mat", camera.getViewMatrix());
-
-
-			layer2.render();
-			//shad2.setUniformMat4("modele_mat", mat);
-			//shad2.setUniform2f("light_pos", glm::vec2(4.0f, 3.5f));
-
+			window.update();
 			/***********INPUTS************/
 			double scrollY = InputManager::getScrollYOffset();
 			if (scrollY != 0)
@@ -175,7 +189,7 @@ int main()
 				time.setFpsLimit(30);
 			}
 			if (InputManager::isKeyPressedOnce(GLFW_KEY_N)) {
-				time.setFpsLimit(20);
+				time.setFpsLimit(15);
 			}
 
 			if (InputManager::isKeyPressed(GLFW_KEY_SPACE))
@@ -231,29 +245,23 @@ int main()
 				player->setTransparency(player_trans);
 			}
 			deplacement = player_speed * (float)time.getDeltaTime();
+
 			if (InputManager::isKeyPressed(GLFW_KEY_RIGHT) || InputManager::isKeyPressed(GLFW_KEY_D) || InputManager::isGamepadButtonPressed(GAMEPAD_BUTTON_DPAD_RIGHT))
 			{
-
-				//if (player->getPositionX() < (map->getWidth() - 0.8f)) 
-				player->move(player->getPositionX() + deplacement, player->getPositionY(), CharaDirection::RIGHT);
+				player->move(player->getPositionX() + deplacement, player->getPositionY());
 
 			}
 			if (InputManager::isKeyPressed(GLFW_KEY_LEFT) || InputManager::isKeyPressed(GLFW_KEY_A) || InputManager::isGamepadButtonPressed(GAMEPAD_BUTTON_DPAD_LEFT))
 			{
-
-				//if (player->getPositionX() > 0.2f) 
-				player->move(player->getPositionX() - deplacement, player->getPositionY(), CharaDirection::LEFT);
-
+				player->move(player->getPositionX() - deplacement, player->getPositionY());
 			}
 			if (InputManager::isKeyPressed(GLFW_KEY_DOWN) || InputManager::isKeyPressed(GLFW_KEY_S) || InputManager::isGamepadButtonPressed(GAMEPAD_BUTTON_DPAD_DOWN))
 			{
-				//if (player->getPositionY() > 0.4f)
-				player->move(player->getPositionX(), player->getPositionY() - deplacement, CharaDirection::DOWN);
+				player->move(player->getPositionX(), player->getPositionY() - deplacement);
 			}
 			if (InputManager::isKeyPressed(GLFW_KEY_UP) || InputManager::isKeyPressed(GLFW_KEY_W) || InputManager::isGamepadButtonPressed(GAMEPAD_BUTTON_DPAD_UP))
 			{
-				//if (player->getPositionY() < (map->getHeight() - 0.8f))
-				player->move(player->getPositionX(), player->getPositionY() + deplacement, CharaDirection::UP);
+				player->move(player->getPositionX(), player->getPositionY() + deplacement);
 			}
 
 			if (InputManager::isKeyPressed(GLFW_KEY_X))
@@ -261,11 +269,21 @@ int main()
 			if (InputManager::isKeyPressed(GLFW_KEY_Z))
 				player_speed -= 1.0f;
 
-			if (InputManager::gamepadJoystickValue(GAMEPAD_JOYSTICK_LEFT_X) != 0.0f || InputManager::gamepadJoystickValue(GAMEPAD_JOYSTICK_LEFT_Y) != 0.0f)
-				player->move(player->getPositionX() + deplacement * InputManager::gamepadJoystickValue(GAMEPAD_JOYSTICK_LEFT_X), player->getPositionY() + deplacement * InputManager::gamepadJoystickValue(GAMEPAD_JOYSTICK_LEFT_Y));
 
-			window.update();
+			float inputJoystickX = InputManager::gamepadJoystickValue(GAMEPAD_JOYSTICK_LEFT_X);
+			float inputJoystickY = InputManager::gamepadJoystickValue(GAMEPAD_JOYSTICK_LEFT_Y);
+			if (inputJoystickX != 0.0f || inputJoystickY != 0.0f) {
+				xdir = deplacement * inputJoystickX;
+				ydir = deplacement * inputJoystickY;
+				player->move(player->getPositionX() + xdir, player->getPositionY() + ydir);
 
+			}
+			if (player->colliderbox->collide(colliderTest)) {
+				player->move(player->colliderbox->getPositionX() - 8.0f, player->colliderbox->getPositionY(), CharaDirection::FIXE);
+			}
+			if (player->colliderbox->collide(colliderBordDown)) {
+				player->move(player->colliderbox->getPositionX() - 8.0f, player->colliderbox->getPositionY(), CharaDirection::FIXE);
+			}
 
 			if (time.oneSecondPassed())
 			{

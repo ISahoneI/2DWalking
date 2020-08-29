@@ -6,16 +6,7 @@ Sprite::Sprite()
 	setTexUV();
 }
 
-Sprite::Sprite(glm::vec3 position, glm::vec2 size, unsigned int color)
-{
-	this->position = position;
-	this->size = size;
-	this->color = color;
-	this->texture = NULL;
-	setTexUV();
-}
-
-Sprite::Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4& color)
+Sprite::Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4 color)
 {
 	this->position = position;
 	this->size = size;
@@ -24,17 +15,11 @@ Sprite::Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4& color)
 	setTexUV();
 }
 
-Sprite::Sprite(float x, float y, float width, float height, unsigned int color)
+Sprite::Sprite(float x, float y, float width, float height, const glm::vec4 color)
 	: Sprite(glm::vec3(x, y, 0), glm::vec2(width, height), color)
 {
 }
-
-Sprite::Sprite(float x, float y, float width, float height, const glm::vec4& color)
-	: Sprite(glm::vec3(x, y, 0), glm::vec2(width, height), color)
-{
-}
-
-Sprite::Sprite(float x, float y, float width, float height, Texture* texture, unsigned int color)
+Sprite::Sprite(float x, float y, float width, float height, Texture* texture, const glm::vec4 color)
 	: Sprite(glm::vec3(x, y, 0), glm::vec2(width, height), color)
 {
 	this->texture = texture;
@@ -47,10 +32,47 @@ void Sprite::submit(Renderer* renderer) const
 	renderer->submit(this);
 }
 
+void Sprite::setColor(unsigned int r, unsigned int g, unsigned int b, unsigned int a)
+{
+	this->colorParameters = glm::vec4(r, g, b, a);
+	this->color = ColorManager::getHexaColori(r, g, b, a);
+}
+
+void Sprite::setColor(const glm::vec4 color)
+{
+	this->colorParameters = color;
+	this->color = ColorManager::getHexaColori((unsigned int)color.x, (unsigned int)color.y, (unsigned int)color.z, (unsigned int)color.w);
+}
+
+void Sprite::setColorRed(unsigned int r)
+{
+	this->colorParameters = glm::vec4(r, (unsigned int)colorParameters.y, (unsigned int)colorParameters.z, (unsigned int)colorParameters.w);
+	this->color = ColorManager::getHexaColori(r, (unsigned int)colorParameters.y, (unsigned int)colorParameters.z, (unsigned int)colorParameters.w);
+}
+
+void Sprite::setColorGreen(unsigned int g)
+{
+	this->colorParameters = glm::vec4((unsigned int)colorParameters.x, g, (unsigned int)colorParameters.z, (unsigned int)colorParameters.w);
+	this->color = ColorManager::getHexaColori((unsigned int)colorParameters.x, g, (unsigned int)colorParameters.z, (unsigned int)colorParameters.w);
+}
+
+void Sprite::setColorBlue(unsigned int b)
+{
+
+	this->colorParameters = glm::vec4((unsigned int)colorParameters.x, (unsigned int)colorParameters.y, b, (unsigned int)colorParameters.w);
+	this->color = ColorManager::getHexaColori((unsigned int)colorParameters.x, (unsigned int)colorParameters.y, b, (unsigned int)colorParameters.w);
+}
+
+
+
 void Sprite::setTransparency(float alpha)
 {
-	this->color = ColorManager::getHexaColorf(1.0f, 1.0f, 1.0f, alpha);
+	unsigned int aCoul = (unsigned int)(alpha * 255.0f);
+	this->colorParameters = glm::vec4((unsigned int)colorParameters.x, (unsigned int)colorParameters.y, (unsigned int)colorParameters.z, aCoul);
+	this->color = ColorManager::getHexaColori((unsigned int)colorParameters.x, (unsigned int)colorParameters.y, (unsigned int)colorParameters.z, aCoul);
 }
+
+
 
 void Sprite::setTexUV()
 {

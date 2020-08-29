@@ -1,10 +1,12 @@
 #pragma once
 
 #include "../../graphics/paints/sprite.h"
+#include "../boxs/colliderbox.h"
 
 
 enum class CharaDirection {
-	NONE = -1,
+	NONE = -2,
+	FIXE = -1,
 	DOWN = 0,
 	UP = 1,
 	RIGHT = 2,
@@ -17,6 +19,10 @@ private:
 
 
 public:
+	Colliderbox* colliderbox;
+	Colliderbox* Xcolliderbox;
+	Colliderbox* Ycolliderbox;
+
 
 	Chara();
 	~Chara();
