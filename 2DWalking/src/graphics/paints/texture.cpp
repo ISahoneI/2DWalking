@@ -7,7 +7,7 @@ Texture::Texture(const std::string& fileName)
 	this->id = load();
 }
 
-Texture::~Texture(){}
+Texture::~Texture() {}
 
 GLuint Texture::load()
 {

@@ -2,15 +2,19 @@
 
 Sprite::Sprite()
 {
+	this->isRender = true;
+	this->level = SpriteLevel::LEVEL0;
 	this->texture = NULL;
 	setTexUV();
 }
 
 Sprite::Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4 color)
 {
+	this->isRender = true;
 	this->position = position;
 	this->size = size;
 	setColor(color);
+	this->level = SpriteLevel::LEVEL0;
 	this->texture = NULL;
 	setTexUV();
 }
@@ -67,9 +71,12 @@ void Sprite::setColorBlue(unsigned int b)
 
 void Sprite::setTransparency(float alpha)
 {
-	unsigned int aCoul = (unsigned int)(alpha * 255.0f);
-	this->colorParameters = glm::vec4((unsigned int)colorParameters.x, (unsigned int)colorParameters.y, (unsigned int)colorParameters.z, aCoul);
-	this->color = ColorManager::getHexaColori((unsigned int)colorParameters.x, (unsigned int)colorParameters.y, (unsigned int)colorParameters.z, aCoul);
+	if (alpha > 255.0f)
+		alpha = 255.0f;
+	if (alpha < 0.0f)
+		alpha = 0.0f;
+	this->colorParameters = glm::vec4((unsigned int)colorParameters.x, (unsigned int)colorParameters.y, (unsigned int)colorParameters.z, alpha);
+	this->color = ColorManager::getHexaColori((unsigned int)colorParameters.x, (unsigned int)colorParameters.y, (unsigned int)colorParameters.z, (unsigned int)alpha);
 }
 
 

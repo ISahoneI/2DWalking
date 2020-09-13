@@ -14,7 +14,6 @@ enum class CollideDirection {
 class Colliderbox : public Sprite
 {
 private:
-	bool estVisible;
 
 public:
 	Colliderbox();

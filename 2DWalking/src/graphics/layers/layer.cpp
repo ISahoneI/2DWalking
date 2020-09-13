@@ -43,10 +43,19 @@ void Layer::render()
 	this->shader->enable();
 
 	this->renderer->begin();
-	for (const Sprite* renderable : this->renderables)
+
+	int i = 0;
+	for (const Sprite* renderable : this->renderables) {
+		if (renderable == NULL || !renderable->getIsRender()) {
+			this->renderables.erase(renderables.begin() + i);
+			continue;
+		}
 		renderable->submit(this->renderer);
+		i++;
+	}
 	//this->renderer->submit(renderable);
 
 	this->renderer->end();
 	this->renderer->flush();
 }
+

@@ -5,15 +5,29 @@
 #include "../paints/colormanager.h"
 #include "../../utilities/mathmanager.h"
 
+
+enum class SpriteLevel {
+	BACKGROUND = -1,
+	LEVEL0 = 0,
+	LEVEL1 = 1,
+	LEVEL2 = 2,
+	LEVEL3 = 3,
+	LEVEL4 = 4,
+	FOREGROUND = 5
+};
+
 class Sprite
 {
 protected:
+	bool isRender;
 	glm::vec3 position;
 	glm::vec2 size;
 	glm::vec4 colorParameters;
 	unsigned int color;
 	std::vector<glm::vec2> uv;
 	Texture* texture;
+	SpriteLevel level;
+
 
 public:
 	Sprite();
@@ -28,6 +42,8 @@ public:
 
 	virtual void submit(Renderer* renderer) const;
 
+	const bool getIsRender() const { return isRender; }
+	void setIsRender(bool isRender) { this->isRender = isRender; }
 
 	void setPosition(float x, float y, float z = 0.0f) { this->position = glm::vec3(x, y, z); }
 	void setPositionX(float x) { this->position.x = x; }
@@ -48,6 +64,8 @@ public:
 
 	void setTexture(Texture* tex) { this->texture = tex; }
 
+	void setLevel(SpriteLevel level) { this->level = level; }
+
 
 	const glm::vec3& getPosition() const { return position; }
 	const float getPositionX() const { return position.x; }
@@ -59,8 +77,11 @@ public:
 	const float getHeight() const { return size.y; }
 	const unsigned int getColor() const { return color; }
 	const glm::vec4 getColorParameters() const { return colorParameters; }
+	const float getTransparency() { return colorParameters.w; }
 	const std::vector<glm::vec2>& getUV() const { return this->uv; }
 	const GLuint getTID() const { return this->texture == nullptr ? false : this->texture->getID(); }
+
+	const SpriteLevel getLevel() const { return level; }
 
 private:
 	void setTexUV();

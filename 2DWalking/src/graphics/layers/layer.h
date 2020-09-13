@@ -3,6 +3,7 @@
 #include "../rendering/renderer2d.h"
 #include "../rendering/shader.h"
 #include "../paints/sprite.h"
+#include <array>
 
 class Layer
 {
@@ -20,5 +21,7 @@ public:
 	virtual void add(Sprite* renderable);
 	virtual void render();
 
-	 const std::vector<Sprite*>& getRenderables() const { return this->renderables; }
+
+	const std::vector<Sprite*>& getRenderables() const { return this->renderables; }
+
 };

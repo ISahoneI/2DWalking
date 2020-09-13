@@ -2,7 +2,8 @@
 
 Colliderbox::Colliderbox() : Sprite(256, 144, 16.0f, 16.0f, glm::vec4(128, 0, 255, 128))
 {
-	this->estVisible = true;
+	setIsRender(false);
+	setLevel(SpriteLevel::LEVEL4);
 }
 
 Colliderbox::~Colliderbox()

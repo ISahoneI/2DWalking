@@ -34,7 +34,7 @@ private:
 	GLsizei indexCount;
 
 	std::vector<GLuint> textureSlots;
-	
+
 public:
 	Renderer2D();
 	~Renderer2D();

@@ -25,8 +25,11 @@
     <ClCompile Include="src\audio\music.cpp" />
     <ClCompile Include="src\audio\sound.cpp" />
     <ClCompile Include="src\audio\sound3d.cpp" />
+    <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\graphics\layers\group.cpp" />
     <ClCompile Include="src\graphics\layers\layer.cpp" />
+    <ClCompile Include="src\graphics\layers\menulayer.cpp" />
+    <ClCompile Include="src\graphics\layers\worldlayer.cpp" />
     <ClCompile Include="src\graphics\paints\sprite.cpp" />
     <ClCompile Include="src\graphics\rendering\indexbuffer.cpp" />
     <ClCompile Include="src\graphics\rendering\renderer2d.cpp" />
@@ -45,7 +48,6 @@
     <ClCompile Include="src\utilities\stb_vorbis.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\2dwalking.h" />
     <ClInclude Include="src\audio\ambient.h" />
     <ClInclude Include="src\audio\ambient3d.h" />
     <ClInclude Include="src\audio\audiomanager.h" />
@@ -53,6 +55,9 @@
     <ClInclude Include="src\audio\sound.h" />
     <ClInclude Include="src\audio\sound3d.h" />
     <ClInclude Include="src\audio\soundpaths.h" />
+    <ClInclude Include="src\engine.h" />
+    <ClInclude Include="src\graphics\layers\menulayer.h" />
+    <ClInclude Include="src\graphics\layers\worldlayer.h" />
     <ClInclude Include="src\graphics\paints\colormanager.h" />
     <ClInclude Include="src\graphics\layers\group.h" />
     <ClInclude Include="src\graphics\layers\layer.h" />
