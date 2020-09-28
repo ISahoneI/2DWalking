@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "../utilities/filemanager.h"
-#include "../utilities/stb_vorbis.h"
+#include "../utilities/externlibs/stb_vorbis.h"
 #include "../utilities/mathmanager.h"
 #include <AL/alut.h>
 #include "music.h"
@@ -17,7 +17,7 @@ private:
 	static Music bgm;
 
 public:
-	
+
 	AudioManager();
 	~AudioManager();
 

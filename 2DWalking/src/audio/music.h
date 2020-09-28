@@ -8,7 +8,7 @@
 #include <string>
 
 #include "soundpaths.h"
-#include "../utilities/stb_vorbis.h"
+#include "../utilities/externlibs/stb_vorbis.h"
 
 
 
@@ -41,7 +41,7 @@ public:
 
 	bool open(const char* filename);
 	bool musicStream(ALuint buffer);
-	
+
 	bool update();
 
 	void setStartLoop(const char* filename);

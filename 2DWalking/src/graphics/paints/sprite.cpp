@@ -3,6 +3,7 @@
 Sprite::Sprite()
 {
 	this->isRender = true;
+	this->isVisible = true;
 	this->level = SpriteLevel::LEVEL0;
 	this->texture = NULL;
 	setTexUV();
@@ -11,6 +12,7 @@ Sprite::Sprite()
 Sprite::Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4 color)
 {
 	this->isRender = true;
+	this->isVisible = true;
 	this->position = position;
 	this->size = size;
 	setColor(color);

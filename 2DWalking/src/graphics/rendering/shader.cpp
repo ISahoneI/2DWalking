@@ -22,7 +22,7 @@ GLuint Shader::init()
 	std::string fragStr = FileManager::read_file(this->fragPath);
 	const char* vertSrc = vertStr.c_str();
 	const char* fragSrc = fragStr.c_str();
-	
+
 	GLint test_load;
 	//LOADING the Vertex Shader
 	glShaderSource(vertex, 1, &vertSrc, NULL);
@@ -48,7 +48,7 @@ GLuint Shader::init()
 		glGetShaderiv(fragment, GL_INFO_LOG_LENGTH, &size_error);
 		std::vector<char> error(size_error);
 		glGetShaderInfoLog(fragment, size_error, &size_error, &error[0]);
-		std::cout << "VERTEX ERROR : " << &error[0] << std::endl;
+		std::cout << "FRAGMENT ERROR : " << &error[0] << std::endl;
 		glDeleteShader(fragment);
 		return 0;
 	}
@@ -84,7 +84,7 @@ void Shader::setUniform1f(const GLchar* name, float value)
 	glUniform1f(getUniformLocation(name), value);
 }
 
-void Shader::setUniform1fv(const GLchar * name, float * value, int count)
+void Shader::setUniform1fv(const GLchar* name, float* value, int count)
 {
 	glUniform1fv(getUniformLocation(name), count, value);
 }
@@ -94,7 +94,7 @@ void Shader::setUniform1i(const GLchar* name, int value)
 	glUniform1i(getUniformLocation(name), value);
 }
 
-void Shader::setUniform1iv(const GLchar * name, int * value, int count)
+void Shader::setUniform1iv(const GLchar* name, int* value, int count)
 {
 	glUniform1iv(getUniformLocation(name), count, value);
 }

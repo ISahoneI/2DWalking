@@ -50,6 +50,7 @@ void Renderer2D::init()
 
 	this->ibo = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
 	glBindVertexArray(0);
+
 	//Transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

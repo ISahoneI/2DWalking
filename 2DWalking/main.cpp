@@ -13,8 +13,9 @@ int main()
 
 		engine->handleSound();
 
-		engine->render();
+
 		if (time.fpsPassed()) {
+			engine->update(time.getDeltaTime(), time.getFixedDeltaTime(), time.elapsed());
 
 			if (InputManager::isKeyPressed(GLFW_KEY_G)) {
 				if (fpsInput > MIN_FPS) {
@@ -29,10 +30,10 @@ int main()
 				}
 			}
 
-			engine->update(time.getFixedDeltaTime());
+
 			if (time.oneSecondPassed())
 			{
-				printf("%d fps | LimitFPS: %d | fixedDeltaTime: %f | deltaTime: %f\n", time.getFps(), fpsInput, (float)time.getFixedDeltaTime(), (float)time.getDeltaTime());
+				printf("%d fps | LimitFPS: %d | fixedDeltaTime: %f | deltaTime: %f | elapasedTime: %f\n", time.getFps(), fpsInput, (float)time.getFixedDeltaTime(), (float)time.getDeltaTime(), time.elapsed());
 				time.resetFps();
 			}
 		}

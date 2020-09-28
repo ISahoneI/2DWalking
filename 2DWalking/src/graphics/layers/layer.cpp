@@ -45,9 +45,10 @@ void Layer::render()
 	this->renderer->begin();
 
 	int i = 0;
+	//std::cout << renderables.size() << std::endl;
 	for (const Sprite* renderable : this->renderables) {
-		if (renderable == NULL || !renderable->getIsRender()) {
-			this->renderables.erase(renderables.begin() + i);
+		if (renderable == NULL || !renderable->getIsRender() || !renderable->getIsVisible()) {
+			//this->renderables.erase(renderables.begin() + i);
 			continue;
 		}
 		renderable->submit(this->renderer);

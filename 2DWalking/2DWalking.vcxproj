@@ -43,9 +43,10 @@
     <ClCompile Include="src\objects\boxs\hitbox.cpp" />
     <ClCompile Include="src\objects\boxs\hurtbox.cpp" />
     <ClCompile Include="src\objects\charas\chara.cpp" />
-    <ClCompile Include="src\objects\maps\map.cpp" />
-    <ClCompile Include="src\utilities\stb_image.cpp" />
-    <ClCompile Include="src\utilities\stb_vorbis.c" />
+    <ClCompile Include="src\objects\maps\tile.cpp" />
+    <ClCompile Include="src\objects\maps\tilemap.cpp" />
+    <ClCompile Include="src\utilities\externlibs\stb_image.cpp" />
+    <ClCompile Include="src\utilities\externlibs\stb_vorbis.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio\ambient.h" />
@@ -74,10 +75,16 @@
     <ClInclude Include="src\objects\boxs\hitbox.h" />
     <ClInclude Include="src\objects\boxs\hurtbox.h" />
     <ClInclude Include="src\objects\charas\chara.h" />
-    <ClInclude Include="src\objects\maps\map.h" />
+    <ClInclude Include="src\objects\maps\tile.h" />
+    <ClInclude Include="src\objects\maps\tilemap.h" />
+    <ClInclude Include="src\utilities\externlibs\rapidxml.hpp" />
+    <ClInclude Include="src\utilities\externlibs\rapidxml_iterators.hpp" />
+    <ClInclude Include="src\utilities\externlibs\rapidxml_print.hpp" />
+    <ClInclude Include="src\utilities\externlibs\rapidxml_utils.hpp" />
     <ClInclude Include="src\utilities\filemanager.h" />
+    <ClInclude Include="src\utilities\global.h" />
     <ClInclude Include="src\utilities\mathmanager.h" />
-    <ClInclude Include="src\utilities\stb_vorbis.h" />
+    <ClInclude Include="src\utilities\externlibs\stb_vorbis.h" />
     <ClInclude Include="src\utilities\timer.h" />
   </ItemGroup>
   <ItemGroup>

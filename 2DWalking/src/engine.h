@@ -27,6 +27,9 @@
 #include "audio/ambient3d.h"
 #include "objects/charas/chara.h"
 #include "graphics/layers/worldlayer.h"
+#include "objects/maps/tilemap.h"
+
+#include "utilities/global.h"
 
 class Engine {
 
@@ -36,7 +39,7 @@ private:
 	AudioManager* audioManager;
 
 	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f));
-	glm::mat4 projection;
+
 
 	Shader& shad = *new Shader("src/shaders/simple.vert", "src/shaders/simple.frag");
 	Shader& shad2 = *new Shader("src/shaders/simple.vert", "src/shaders/simple.frag");
@@ -50,11 +53,12 @@ private:
 	Chara* charaTest;
 	Colliderbox* colliderTest;
 	Colliderbox* colliderBordDown;
-
 	Sprite* brouillard;
 
-	Group* group;
+	TileMap* tileMap;
 
+	Texture* texTest = new Texture("res/textures/test2.png");
+	int texCount = 0;
 	//Audio test;
 	Sound3d* hp;
 	Sound* hpRel;
@@ -69,10 +73,10 @@ public:
 
 	void init();
 	void handleSound();
-	void update(double deltaTime);
-	void render();
+	void update(double deltaTime, double fixedDeltaTime, float elapsedTime);
 	void clean();
 
+private:
 
 
 };

@@ -24,9 +24,6 @@
     <ClCompile Include="src\graphics\layers\group.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\utilities\stb_image.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\inputs\camera.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -57,9 +54,6 @@
     <ClCompile Include="src\audio\sound.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\utilities\stb_vorbis.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\audio\music.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -81,9 +75,6 @@
     <ClCompile Include="src\objects\boxs\hurtbox.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\objects\maps\map.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\objects\charas\chara.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -94,6 +85,18 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\layers\menulayer.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objects\maps\tilemap.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utilities\externlibs\stb_image.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utilities\externlibs\stb_vorbis.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objects\maps\tile.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -149,9 +152,6 @@
     <ClInclude Include="src\audio\sound.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\utilities\stb_vorbis.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\audio\music.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -176,9 +176,6 @@
     <ClInclude Include="src\objects\boxs\hurtbox.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\objects\maps\map.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\objects\charas\chara.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -189,6 +186,30 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\layers\menulayer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects\maps\tilemap.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utilities\externlibs\stb_vorbis.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utilities\externlibs\rapidxml_utils.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utilities\externlibs\rapidxml.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utilities\externlibs\rapidxml_iterators.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utilities\externlibs\rapidxml_print.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects\maps\tile.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utilities\global.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

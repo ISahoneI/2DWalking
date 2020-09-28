@@ -2,6 +2,9 @@
 
 #include "../../graphics/paints/sprite.h"
 #include "../boxs/colliderbox.h"
+#include "../../audio/sound3d.h"
+#include "../../audio/audiomanager.h"
+#include <array>
 
 enum class CharaAnimeState {
 	IDLE = 0,
@@ -35,9 +38,12 @@ private:
 	float animationSpeed = 0.12f; //120 ms
 	float deltaTimeCount = 0.0f;
 
+	std::array<Sound3d*, 15> sounds3d;
+	int soundIterator = 0;
+
 public:
 
-	Chara();
+	Chara(Texture* spritesheet);
 	~Chara();
 
 	void move(float x, float y, CharaDirection direction = CharaDirection::NONE);
@@ -62,6 +68,10 @@ public:
 
 	void update(double deltaTime);
 
+
+	void playSound(const char* filePath, float volume = 1.0f, float pitch = 1.0f);
+
 private:
 	void initColliderBox();
+	void initSounds3d();
 };

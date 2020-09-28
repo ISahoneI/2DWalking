@@ -20,6 +20,7 @@ class Sprite
 {
 protected:
 	bool isRender;
+	bool isVisible;
 	glm::vec3 position;
 	glm::vec2 size;
 	glm::vec4 colorParameters;
@@ -44,6 +45,8 @@ public:
 
 	const bool getIsRender() const { return isRender; }
 	void setIsRender(bool isRender) { this->isRender = isRender; }
+	const bool getIsVisible() const { return isVisible; }
+	void setIsVisible(bool isVisible) { this->isVisible = isVisible; }
 
 	void setPosition(float x, float y, float z = 0.0f) { this->position = glm::vec3(x, y, z); }
 	void setPositionX(float x) { this->position.x = x; }
@@ -71,6 +74,9 @@ public:
 	const float getPositionX() const { return position.x; }
 	const float getPositionY() const { return position.y; }
 	const float getPositionZ() const { return position.z; }
+
+	const float getCenterX() const { return getPositionX() + getWidth() * 0.5f; }
+	const float getCenterY() const { return getPositionY() + getHeight() * 0.5f; }
 
 	const glm::vec2& getSize() const { return size; }
 	const float getWidth() const { return size.x; }

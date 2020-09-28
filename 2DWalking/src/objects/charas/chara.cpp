@@ -1,17 +1,22 @@
 #include "chara.h"
 
-Chara::Chara() : Sprite(360, 120, 32, 40, new Texture("res/textures/spritesheet/Heros_Yzao.png"), glm::vec4(255, 255, 255, 255))
+
+Chara::Chara(Texture* spritesheet) : Sprite(360, 120, 32, 40, spritesheet, glm::vec4(255, 255, 255, 255))
 {
 	setAnimeState(CharaAnimeState::IDLE);
 	setLevel(SpriteLevel::LEVEL1);
 	setSpeed(100.0f);
 	setTexUVSpriteSheet(1, 2);
-	colliderbox = new Colliderbox();
 	initColliderBox();
+	initSounds3d();
 }
 
 Chara::~Chara()
 {
+	delete colliderbox;
+	for (size_t i = 0; i < sounds3d.size(); i++) {
+		delete sounds3d[i];
+	}
 }
 
 void Chara::move(float x, float y, CharaDirection direction)
@@ -114,10 +119,23 @@ void Chara::update(double deltaTime)
 	animation(deltaTime);
 }
 
+void Chara::playSound(const char* filePath, float volume, float pitch)
+{
+	sounds3d[soundIterator]->setPosition(glm::vec3(this->getPositionX(), this->getPositionY(), 100.0f));
+	sounds3d[soundIterator]->play(AudioManager::getBufferSound(filePath), volume, pitch);
+	soundIterator = (soundIterator + 1) % (int)sounds3d.size();
+}
+
 void Chara::initColliderBox()
 {
-	colliderbox->setSize(14, 12);
+	colliderbox = new Colliderbox(getPositionX() + 9.0f, getPositionY(), 14, 12);
 	colliderbox->setColor(255, 0, 0, 128);
-	colliderbox->setPosition(getPositionX() + 9.0f, getPositionY());
+}
+
+void Chara::initSounds3d()
+{
+	for (size_t i = 0; i < sounds3d.size(); i++) {
+		sounds3d[i] = new Sound3d();
+	}
 }
 

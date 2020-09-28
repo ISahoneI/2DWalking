@@ -27,39 +27,33 @@ void Engine::init()
 	shad2.enable();
 
 	worldLayer = new WorldLayer(&shad);	layer2 = new Layer(&shad2);
-
+	Texture* herosYzao = new Texture("res/textures/spritesheet/Heros_Yzao.png");
 	//Entities
 	map = new Sprite(0.0f, 0.0f, 800.0f, 1680.0f, new Texture("res/textures/Omara.png"), glm::vec4(255, 255, 255, 255));
-	player = new Chara();
+	player = new Chara(herosYzao);
 	skyle = new Sprite(350, 180, 24, 32, new Texture("res/textures/skyle_bas.png"));
 	skyle->setLevel(SpriteLevel::LEVEL1);
-	charaTest = new Chara();
+	charaTest = new Chara(herosYzao);
 	charaTest->move(281, 150);
 
-	colliderTest = new Colliderbox();
-	colliderTest->setSize(176, 96);
-	colliderTest->setPosition(96, 144);
-	colliderBordDown = new Colliderbox();
-	colliderBordDown->setPosition(-16, -16);
-	colliderBordDown->setSize(816, 16);
+	colliderTest = new Colliderbox(96, 144, 176, 96);
+	colliderBordDown = new Colliderbox(-16, -16, 816, 16);
 
 	brouillard = new Sprite(0, 0, 16, 9, new Texture("res/textures/brouillard_bleu.png"), glm::vec4(255, 255, 255, 70));
 
-	group = new Group(glm::translate(glm::mat4(1.0f), glm::vec3(4, 4, 0)));
-	group->add(new Sprite(4, 4, 4, 4, glm::vec4(255, 255, 0, 102)));
-	group->add(new Sprite(4, 4, 3, 3, glm::vec4(0, 0, 255, 128)));
-	group->add(new Sprite(4, 4, 2, 2, glm::vec4(255, 0, 255, 102)));
-	group->add(new Sprite(4, 4, 1, 1, glm::vec4(0, 255, 0, 102)));
 
-	worldLayer->add(map);
+
+	//worldLayer->add(map);
 	worldLayer->add(skyle);
 	worldLayer->add(player);
 	worldLayer->add(charaTest);
 	worldLayer->add(colliderTest);
 	worldLayer->add(colliderBordDown);
-	worldLayer->add(new Sprite(0.0f, 0.0f, 800.0f, 1680.0f, new Texture("res/textures/tilemaps/zone_sup.png"), glm::vec4(255, 255, 255, 255)));
 
 	layer2->add(brouillard);
+
+	tileMap = new TileMap(new Texture("res/textures/tilemaps/chipset.png"), "res/textures/tilemaps/map.tmx");
+	worldLayer->add(tileMap);
 
 	//AUDIO
 	hp = new Sound3d();
@@ -92,16 +86,18 @@ void Engine::handleSound()
 	if (InputManager::isKeyPressedOnce(GLFW_KEY_J))
 		hp2->play(AudioManager::getBufferSound(DW_AMBIENT_1), 1.0f, 1.0f);
 
+	if (InputManager::isKeyPressedOnce(GLFW_KEY_V))
+		charaTest->playSound(DW_SOUND_1);
+
 }
 
 
-void Engine::update(double deltaTime)
+void Engine::update(double deltaTime, double fixedDeltaTime, float elapsedTime)
 {
-	window.update();
+	window.clear();
 
-	float playerCenterX = player->getPositionX() - (427.0f * 0.5f) + (player->getWidth() * 0.5f);
-	float playerCenterY = player->getPositionY() - (240.0f * 0.5f) + (player->getHeight() * 0.5f);
-
+	worldLayer->update(camera);
+	worldLayer->render();
 	/***********INPUTS************/
 	double scrollY = InputManager::getScrollYOffset();
 	if (scrollY != 0)
@@ -115,8 +111,6 @@ void Engine::update(double deltaTime)
 	{
 		player->setPosition(0.0f, 0.0f, 1.0f);
 		camera.setZoom(1.0f);
-		camera.setPosition((playerCenterX + 8.0f) * camera.getZoom(), (playerCenterY + 4.5f) * camera.getZoom());
-
 	}
 
 
@@ -134,14 +128,19 @@ void Engine::update(double deltaTime)
 		float player_trans = player->getTransparency() - 100.0f * (float)deltaTime;
 		player->setTransparency(player_trans);
 	}
-	if (InputManager::isKeyPressedOnce(GLFW_KEY_U)) {
-		skyle->setIsRender(false);
+	if (InputManager::isKeyPressed(GLFW_KEY_U)) {
+		skyle->setIsVisible(!skyle->getIsVisible());
+		/*Sprite* mapTestAdd = new Sprite(player->getPositionX(), player->getPositionY(), 16.0f, 16.0f, texTest, glm::vec4(255, 255, 255, 255));
+		mapTestAdd->setLevel(SpriteLevel::FOREGROUND);
+		worldLayer->add(mapTestAdd);
+		texCount++;
+		std::cout << texCount << std::endl;*/
 	}
 
 	if (InputManager::isKeyPressed(GLFW_KEY_X))
-		player->setSpeed(player->getSpeed() + 0.1f);
+		player->setSpeed(player->getSpeed() + 100.0f * (float)deltaTime);
 	if (InputManager::isKeyPressed(GLFW_KEY_Z))
-		player->setSpeed(player->getSpeed() - 0.1f);
+		player->setSpeed(player->getSpeed() - 100.0f * (float)deltaTime);
 
 
 	//DEPLACEMENT
@@ -178,60 +177,32 @@ void Engine::update(double deltaTime)
 	player->collide(colliderTest);
 	player->collide(colliderBordDown);
 	player->collide(charaTest->getColliderbox());
+	for (Tile* tile : tileMap->getLevels(1)) {
+		player->collide(tile->getColliderbox());
+	}
 	player->update(deltaTime);
-}
 
-void Engine::render()
-{
-	window.clear();
-	double x, y;
-	InputManager::getMousePosition(x, y);
-	int largeur, hauteur;
-	window.getDimension(largeur, hauteur);
+	/************ CAMERA **************/
+	camera.centerOn(player->getCenterX(), player->getCenterY());
 
-	worldLayer->render();
-	shad.setUniform2f("light_pos", glm::vec2((float)(x * 427.0f / (float)largeur), (float)(240.0f - y * 240.0f / (float)hauteur)));
+	//worldLayer->clipping(camera);
 
-	/***** TEST ROTATION  ************
-		float point_rot = 6.0f;
-		glm::mat4 mat = glm::translate(glm::mat4(1), glm::vec3(point_rot, point_rot, point_rot));
-		mat = mat * glm::rotate(glm::mat4(1), time.elapsed(), glm::vec3(0, 0, 1));
-		mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rot, -point_rot, -point_rot));
-		shad.setUniformMat4("modele_mat", mat);
-		*****************/
+	/*float point_rotX = player->getPositionX();
+	float point_rotY = player->getPositionY();
+	glm::mat4 mat = glm::translate(glm::mat4(1), glm::vec3(point_rotX, point_rotY, point_rotX));
+	mat = mat * glm::rotate(glm::mat4(1), elapsedTime * 0.05f, glm::vec3(0, 0, 1));
+	mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rotX, -point_rotY, -point_rotX));
+	shad.setUniformMat4("modele_mat", mat);*/
 
-
-	shad.setUniformMat4("projection_mat", projection);
-
-	/**********Bord de map**********/
-	//camera.setPosition(playerCenterX * camera.getZoom(), playerCenterY * camera.getZoom());
+	shad.setUniformMat4("projection_mat", camera.getProjectionMatrix());
 	shad.setUniformMat4("view_mat", camera.getViewMatrix());
-
 
 	layer2->render();
 
-	//shad2.setUniformMat4("modele_mat", mat);
-		//shad2.setUniform2f("light_pos", glm::vec2(4.0f, 3.5f));
 
-		/************ CAMERA **************/
-			/****Centrer le zoom sur le heros*****/
-	float playerCenterX = player->getPositionX() - (427.0f * 0.5f) + (player->getWidth() * 0.5f);
-	float playerCenterY = player->getPositionY() - (240.0f * 0.5f) + (player->getHeight() * 0.5f);
-	//if (player->getPositionX() >= ((camera.getZoom() * 427.0f - player->getWidth())) / 2.0f && player->getPositionX() <= map->getWidth() - ((camera.getZoom() * 427.0f + player->getWidth())) / 2.0f)
-	camera.setPosX(playerCenterX * camera.getZoom());
-	//if (player->getPositionY() >= ((camera.getZoom() * 240.0f - player->getHeight())) / 2.0f && player->getPositionY() <= map->getHeight() - ((camera.getZoom() * 240.0f + player->getHeight())) / 2.0f)
-	camera.setPosY(playerCenterY * camera.getZoom());
-
-	projection = glm::ortho(
-		camera.getZoom() * (0.0f - (player->getPositionX() + 16.0f)) + player->getPositionX() + 16.0f,
-		camera.getZoom() * (427.0f - (player->getPositionX() + 16.0f)) + player->getPositionX() + 16.0f,
-		camera.getZoom() * (0.0f - (player->getPositionY() + 12.0f)) + player->getPositionY() + 12.0f,
-		camera.getZoom() * (240.0f - (player->getPositionY() + 12.0f)) + player->getPositionY() + 12.0f,
-		-1.0f,
-		1.0f
-	);
-
+	window.update();
 }
+
 
 void Engine::clean()
 {

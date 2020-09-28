@@ -14,14 +14,16 @@ enum class CollideDirection {
 class Colliderbox : public Sprite
 {
 private:
+	bool isCollidable;
 
 public:
-	Colliderbox();
+	Colliderbox(float x, float y, float width, float height);
 	~Colliderbox();
 
 
 	bool isCollided(const Colliderbox* target);
 	bool collide(const Colliderbox* target);
 
-
+	bool getIsCollidable() { return isCollidable; }
+	void setIsCollidable(bool isCollidable) { this->isCollidable = isCollidable; }
 };

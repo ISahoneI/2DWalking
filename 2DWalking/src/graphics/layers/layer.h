@@ -4,6 +4,7 @@
 #include "../rendering/shader.h"
 #include "../paints/sprite.h"
 #include <array>
+#include <algorithm>
 
 class Layer
 {

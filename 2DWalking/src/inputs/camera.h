@@ -1,5 +1,6 @@
 #pragma once
 #include "../utilities/mathmanager.h"
+#include "../utilities/global.h"
 
 #include <vector>
 
@@ -15,7 +16,11 @@ class Camera
 {
 private:
 
+	//Position ecran
 	glm::vec3 position;
+
+	//Position sur la map
+	glm::vec2 positionRef;
 
 	glm::vec3 X_axis;
 	glm::vec3 Y_axis;
@@ -32,9 +37,11 @@ public:
 	~Camera();
 
 	const glm::mat4 getViewMatrix() const;
+	const glm::mat4 getProjectionMatrix() const;
 
 	void actionMove(CameraDirection direction, float deltaTime);
 	void actionZoom(float yoffset);
+	void centerOn(float x, float y);
 
 	void setPosition(glm::vec3 position);
 	void setPosition(float x, float y, float z = 0.0f);
@@ -48,6 +55,11 @@ public:
 	const float getPosY() const { return this->position.y; }
 	const float getZoom() const { return this->zoom; }
 
+	const float getPosRefX() const { return this->positionRef.x; }
+	const float getPosRefY() const { return this->positionRef.y; }
+
 private:
 	void initAxis();
+
+	void setPositionRef(glm::vec2 positionRef);
 };

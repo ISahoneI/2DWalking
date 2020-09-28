@@ -5,7 +5,7 @@
 #include <Windows.h>
 
 #define MAX_FPS 500.0
-#define MIN_FPS 15.0
+#define MIN_FPS 20.0
 
 
 

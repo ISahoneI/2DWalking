@@ -25,6 +25,18 @@ const glm::mat4 Camera::getViewMatrix() const
 	return glm::lookAt(position, position + Z_axis, Y_axis);
 }
 
+const glm::mat4 Camera::getProjectionMatrix() const
+{
+	return glm::ortho(
+		getZoom() * (0.0f - positionRef.x) + positionRef.x,
+		getZoom() * (ENGINE_RESOLUTION_X - positionRef.x) + positionRef.x,
+		getZoom() * (0.0f - positionRef.y) + positionRef.y,
+		getZoom() * (ENGINE_RESOLUTION_Y - positionRef.y) + positionRef.y,
+		-1.0f,
+		1.0f
+	);
+}
+
 void Camera::actionMove(CameraDirection direction, float deltaTime)
 {
 	float velocity = moveSpeed * deltaTime;
@@ -46,6 +58,13 @@ void Camera::actionZoom(float yoffset)
 		zoom = 0.1f;
 	if (zoom >= 3.0f)
 		zoom = 3.0f;
+}
+
+void Camera::centerOn(float x, float y)
+{
+	setPositionRef(glm::vec2(x, y));
+	setPosX(getZoom() * (x - ENGINE_RESOLUTION_X * 0.5f));
+	setPosY(getZoom() * (y - ENGINE_RESOLUTION_Y * 0.5f));
 }
 
 void Camera::setPosition(glm::vec3 position)
@@ -88,4 +107,9 @@ void Camera::initAxis()
 	this->X_axis = glm::vec3(1.0f, 0.0f, 0.0f);
 	this->Y_axis = glm::vec3(0.0f, 1.0f, 0.0f);
 	this->Z_axis = glm::vec3(0.0f, 0.0f, -1.0f);
+}
+
+void Camera::setPositionRef(glm::vec2 positionRef)
+{
+	this->positionRef = positionRef;
 }
