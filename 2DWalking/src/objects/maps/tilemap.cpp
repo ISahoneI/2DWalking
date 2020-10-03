@@ -12,6 +12,17 @@ TileMap::~TileMap()
 {
 }
 
+Tile* TileMap::getTileAt(const int lvl, const float x, const float y)
+{
+	int index = (int)(x / tilewidth) + (height * width) - height - (int)(y / tileheight) * width;
+	if (lvl < 0 || lvl >= 4)
+		return NULL;
+	if (index < 0 || index >= (int)levels[lvl].size())
+		return NULL;
+	//std::cout << "x:" << (int)(x / 16) << " y:" << (int)(y / 16) << " index:" << index << std::endl;
+	return levels[lvl].at(index);
+}
+
 void TileMap::loadMapFromXml(const char* xmlMapPath)
 {
 	xmlMapFile = new rapidxml::file<>(xmlMapPath);
@@ -23,6 +34,7 @@ void TileMap::loadMapFromXml(const char* xmlMapPath)
 	height = atoi(node->first_attribute("height")->value());
 	tilewidth = atoi(node->first_attribute("tilewidth")->value());
 	tileheight = atoi(node->first_attribute("tileheight")->value());
+
 	std::vector<std::string> dataTile;
 
 	int lvl = 0;
@@ -51,6 +63,10 @@ void TileMap::loadMapFromXml(const char* xmlMapPath)
 				if (idTile > 0) {
 					Tile* tile = new Tile(posX, posY, (float)tilewidth, (float)tileheight, tileset, (SpriteLevel)lvl);
 					tile->setTexUVTileset(idTile);
+					levels[lvl].push_back(tile);
+				}
+				else {
+					Tile* tile = new Tile(posX, posY, (float)tilewidth, (float)tileheight, (SpriteLevel)lvl);
 					levels[lvl].push_back(tile);
 				}
 

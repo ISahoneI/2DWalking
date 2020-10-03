@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <Windows.h>
 
-#define MAX_FPS 500.0
+#define MAX_FPS 5000.0
 #define MIN_FPS 20.0
 
 

@@ -53,7 +53,7 @@ void Engine::init()
 	layer2->add(brouillard);
 
 	tileMap = new TileMap(new Texture("res/textures/tilemaps/chipset.png"), "res/textures/tilemaps/map.tmx");
-	worldLayer->add(tileMap);
+	//worldLayer->add(tileMap);
 
 	//AUDIO
 	hp = new Sound3d();
@@ -96,7 +96,7 @@ void Engine::update(double deltaTime, double fixedDeltaTime, float elapsedTime)
 {
 	window.clear();
 
-	worldLayer->update(camera);
+
 	worldLayer->render();
 	/***********INPUTS************/
 	double scrollY = InputManager::getScrollYOffset();
@@ -177,21 +177,26 @@ void Engine::update(double deltaTime, double fixedDeltaTime, float elapsedTime)
 	player->collide(colliderTest);
 	player->collide(colliderBordDown);
 	player->collide(charaTest->getColliderbox());
-	for (Tile* tile : tileMap->getLevels(1)) {
+	/*for (Tile* tile : tileMap->getLevels(1)) {
 		player->collide(tile->getColliderbox());
-	}
+	}*/
 	player->update(deltaTime);
 
 	/************ CAMERA **************/
 	camera.centerOn(player->getCenterX(), player->getCenterY());
 
 	//worldLayer->clipping(camera);
+	worldLayer->update(camera, tileMap);
+	//std::cout << "x:" << (int)(player->getPositionX() / 16) << " y:" << (int)(player->getPositionY() / 16) << std::endl;
+	//if (tileMap->getTileAt(0, (player->getCenterX()), (int)(player->getPositionY() + 4)) != NULL)
+	//	tileMap->getTileAt(0, (player->getCenterX()), (int)(player->getPositionY() + 4))->setIsVisible(false);
 
 	/*float point_rotX = player->getPositionX();
 	float point_rotY = player->getPositionY();
 	glm::mat4 mat = glm::translate(glm::mat4(1), glm::vec3(point_rotX, point_rotY, point_rotX));
 	mat = mat * glm::rotate(glm::mat4(1), elapsedTime * 0.05f, glm::vec3(0, 0, 1));
 	mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rotX, -point_rotY, -point_rotX));
+
 	shad.setUniformMat4("modele_mat", mat);*/
 
 	shad.setUniformMat4("projection_mat", camera.getProjectionMatrix());

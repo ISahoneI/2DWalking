@@ -27,6 +27,7 @@ public:
 	~TileMap();
 
 	std::vector<Tile*> getLevels(int lvl) { return levels[lvl]; }
+	Tile* getTileAt(const int lvl, const float x, const float y);
 
 private:
 

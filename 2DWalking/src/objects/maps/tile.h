@@ -9,6 +9,7 @@ private:
 	Colliderbox* colliderbox;
 
 public:
+	Tile(float x, float y, float width, float height, SpriteLevel level);
 	Tile(float x, float y, float width, float height, Texture* tileset, SpriteLevel level);
 	~Tile();
 

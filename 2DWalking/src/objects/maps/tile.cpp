@@ -1,5 +1,17 @@
 #include "tile.h"
 
+
+Tile::Tile(float x, float y, float width, float height, SpriteLevel level) : Sprite(x, y, width, height)
+{
+	colliderbox = new Colliderbox(x, y, width, height);
+	setLevel(level);
+	setIsRender(false);
+	setIsVisible(false);
+	colliderbox->setIsRender(false);
+	colliderbox->setIsVisible(false);
+	colliderbox->setIsCollidable(false);
+}
+
 Tile::Tile(float x, float y, float width, float height, Texture* tileset, SpriteLevel level) : Sprite(x, y, width, height, tileset)
 {
 	colliderbox = new Colliderbox(x, y, width, height);

@@ -14,6 +14,8 @@ private:
 	std::vector<Sprite*> levels[5];
 	std::vector<Sprite*> foregrounds;
 
+	std::vector<Sprite*> objects;
+
 public:
 	WorldLayer(Shader* shader);
 	~WorldLayer();
@@ -23,7 +25,7 @@ public:
 	void add(TileMap* tilemap);
 	void render();
 	void update();
-	void update(Camera camera);
+	void update(Camera camera, TileMap* tilemap);
 	void clipping(Camera camera);
 
 	struct sortByYPosition

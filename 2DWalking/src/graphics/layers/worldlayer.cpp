@@ -13,10 +13,13 @@ void WorldLayer::add(Sprite* renderable)
 	SpriteLevel lvl = renderable->getLevel();
 	if (lvl == SpriteLevel::BACKGROUND)
 		backgrounds.push_back(renderable);
-	else if ((int)lvl >= 0 && (int)lvl < 5)
+	else if ((int)lvl >= 0 && (int)lvl < 5) {
 		levels[(int)lvl].push_back(renderable);
+		objects.push_back(renderable);
+	}
 	else if (lvl == SpriteLevel::FOREGROUND)
 		foregrounds.push_back(renderable);
+
 
 	update();
 }
@@ -57,7 +60,7 @@ void WorldLayer::update()
 	renderables.insert(renderables.begin(), backgrounds.begin(), backgrounds.end());
 }
 
-void WorldLayer::update(Camera camera)
+void WorldLayer::update(Camera camera, TileMap* tilemap)
 {
 	const float xmin = camera.getPosRefX() - (ENGINE_RESOLUTION_X * 0.5f) * camera.getZoom();
 	const float xmax = camera.getPosRefX() + (ENGINE_RESOLUTION_X * 0.5f) * camera.getZoom();
@@ -68,16 +71,24 @@ void WorldLayer::update(Camera camera)
 
 	renderables.insert(renderables.begin(), foregrounds.begin(), foregrounds.end());
 	for (int lvl = 4; lvl >= 0; lvl--) {
+		levels[lvl].clear();
+		for (float x = xmin; x < xmax + 16.0f; x += 16.0f) {
+			for (float y = ymin; y < ymax + 16.0f; y += 16.0f) {
+				Tile* tile = tilemap->getTileAt(lvl, x, y);
+				if (tile != NULL)
+					levels[lvl].push_back(tile);
+			}
+		}
 		std::sort(levels[lvl].begin(), levels[lvl].end(), sortByYPosition());
 		renderables.insert(renderables.begin(), levels[lvl].begin(), levels[lvl].end());
-		auto it = std::remove_if(renderables.begin(),
+		/*auto it = std::remove_if(renderables.begin(),
 			renderables.end(),
 			[xmin, xmax, ymin, ymax](Sprite* renderable) {
 				return !(renderable->getPositionX() + renderable->getWidth() > xmin&& renderable->getPositionX() < xmax
 					&& renderable->getPositionY() + renderable->getHeight() > ymin&& renderable->getPositionY() < ymax);
 			});
 
-		renderables.erase(it, renderables.end());
+		renderables.erase(it, renderables.end());*/
 	}
 	renderables.insert(renderables.begin(), backgrounds.begin(), backgrounds.end());
 }
