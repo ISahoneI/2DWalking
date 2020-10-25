@@ -10,12 +10,14 @@ Tile::Tile(float x, float y, float width, float height, SpriteLevel level) : Spr
 	colliderbox->setIsRender(false);
 	colliderbox->setIsVisible(false);
 	colliderbox->setIsCollidable(false);
+	setIdTile(0);
 }
 
 Tile::Tile(float x, float y, float width, float height, Texture* tileset, SpriteLevel level) : Sprite(x, y, width, height, tileset)
 {
 	colliderbox = new Colliderbox(x, y, width, height);
 	setLevel(level);
+	setIdTile(0);
 }
 
 Tile::~Tile()

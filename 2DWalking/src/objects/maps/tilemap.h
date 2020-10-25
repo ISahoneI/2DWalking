@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tile.h"
-#include "../../utilities/externlibs/rapidxml_utils.hpp"
+#include <rapidxml_utils.hpp>
 
 #include <sstream>
 #include <algorithm>
@@ -14,6 +14,7 @@ private:
 	rapidxml::file<>* xmlMapFile;
 
 	std::vector<Tile*> levels[5];
+	std::vector<Colliderbox*> colliders;
 
 	int width, height;
 	int tilewidth, tileheight;
@@ -28,6 +29,8 @@ public:
 
 	std::vector<Tile*> getLevels(int lvl) { return levels[lvl]; }
 	Tile* getTileAt(const int lvl, const float x, const float y);
+
+	const std::vector<Colliderbox*> getColliders() const { return colliders; }
 
 private:
 

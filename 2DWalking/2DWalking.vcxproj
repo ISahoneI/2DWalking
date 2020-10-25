@@ -26,6 +26,9 @@
     <ClCompile Include="src\audio\sound.cpp" />
     <ClCompile Include="src\audio\sound3d.cpp" />
     <ClCompile Include="src\engine.cpp" />
+    <ClCompile Include="src\graphics\fonts\fontmanager.cpp" />
+    <ClCompile Include="src\graphics\fonts\glyph.cpp" />
+    <ClCompile Include="src\graphics\fonts\text.cpp" />
     <ClCompile Include="src\graphics\layers\group.cpp" />
     <ClCompile Include="src\graphics\layers\layer.cpp" />
     <ClCompile Include="src\graphics\layers\menulayer.cpp" />
@@ -57,6 +60,10 @@
     <ClInclude Include="src\audio\sound3d.h" />
     <ClInclude Include="src\audio\soundpaths.h" />
     <ClInclude Include="src\engine.h" />
+    <ClInclude Include="src\graphics\fonts\fontmanager.h" />
+    <ClInclude Include="src\graphics\fonts\fontpaths.h" />
+    <ClInclude Include="src\graphics\fonts\glyph.h" />
+    <ClInclude Include="src\graphics\fonts\text.h" />
     <ClInclude Include="src\graphics\layers\menulayer.h" />
     <ClInclude Include="src\graphics\layers\worldlayer.h" />
     <ClInclude Include="src\graphics\paints\colormanager.h" />
@@ -143,13 +150,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLM\include;$(SolutionDir)Dependencies\STB_IMAGE\include;$(SolutionDir)Dependencies\OPENAL\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLM\include;$(SolutionDir)Dependencies\STB_IMAGE\include;$(SolutionDir)Dependencies\OPENAL\include;$(SolutionDir)Dependencies\RAPIDXML\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\OPENAL\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLM\include;$(SolutionDir)Dependencies\STB_IMAGE\include;$(SolutionDir)Dependencies\OPENAL\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLM\include;$(SolutionDir)Dependencies\STB_IMAGE\include;$(SolutionDir)Dependencies\OPENAL\include;$(SolutionDir)Dependencies\RAPIDXML\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\OPENAL\lib;$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>

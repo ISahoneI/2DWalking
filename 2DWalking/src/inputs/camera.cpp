@@ -102,6 +102,26 @@ void Camera::setZoom(float zoom)
 	this->zoom = zoom;
 }
 
+const float Camera::getBordXmin() const
+{
+	return getPosRefX() - (ENGINE_RESOLUTION_X * 0.5f) * getZoom();
+}
+
+const float Camera::getBordXmax() const
+{
+	return getPosRefX() + (ENGINE_RESOLUTION_X * 0.5f) * getZoom();
+}
+
+const float Camera::getBordYmin() const
+{
+	return getPosRefY() - (ENGINE_RESOLUTION_Y * 0.5f) * getZoom();
+}
+
+const float Camera::getBordYmax() const
+{
+	return getPosRefY() + (ENGINE_RESOLUTION_Y * 0.5f) * getZoom();
+}
+
 void Camera::initAxis()
 {
 	this->X_axis = glm::vec3(1.0f, 0.0f, 0.0f);

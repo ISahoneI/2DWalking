@@ -21,9 +21,9 @@ public:
 	~Colliderbox();
 
 
-	bool isCollided(const Colliderbox* target);
+	bool isOverlap(const Colliderbox* target);
 	bool collide(const Colliderbox* target);
 
-	bool getIsCollidable() { return isCollidable; }
+	const bool getIsCollidable() const { return isCollidable; }
 	void setIsCollidable(bool isCollidable) { this->isCollidable = isCollidable; }
 };

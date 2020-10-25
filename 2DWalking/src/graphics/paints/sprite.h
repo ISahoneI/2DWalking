@@ -32,6 +32,7 @@ protected:
 
 public:
 	Sprite();
+	Sprite(Texture* texture);
 	//Sprite(glm::vec3 position, glm::vec2 size, unsigned int color);
 	Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4 color);
 	//Sprite(float x, float y, float width, float height, unsigned int color = 0xffffffff);

@@ -8,8 +8,9 @@ class Group : public Sprite
 private:
 	std::vector<Sprite*> renderables;
 	glm::mat4 transformation;
-	
+
 public:
+	Group();
 	Group(const glm::mat4& transform);
 	~Group();
 	void add(Sprite* renderable);

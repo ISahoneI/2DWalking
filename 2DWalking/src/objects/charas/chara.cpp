@@ -1,7 +1,7 @@
 #include "chara.h"
 
 
-Chara::Chara(Texture* spritesheet) : Sprite(360, 120, 32, 40, spritesheet, glm::vec4(255, 255, 255, 255))
+Chara::Chara(Texture* spritesheet) : Sprite(360, 820, 32, 40, spritesheet, glm::vec4(255, 255, 255, 255))
 {
 	setAnimeState(CharaAnimeState::IDLE);
 	setLevel(SpriteLevel::LEVEL1);
@@ -48,7 +48,7 @@ void Chara::move(float x, float y, CharaDirection direction)
 
 		if (distX != 0.0f) {
 			setPositionX(x);
-			colliderbox->setPositionX(x + 9.0f);
+			colliderbox->setPositionX(x + 10.0f);
 		}
 		if (distY != 0.0f) {
 			setPositionY(y);
@@ -108,7 +108,7 @@ bool Chara::collide(const Colliderbox* target)
 	bool collideTest = colliderbox->collide(target);
 	if (collideTest)
 	{
-		setPositionX(colliderbox->getPositionX() - 9.0f);
+		setPositionX(colliderbox->getPositionX() - 10.0f);
 		setPositionY(colliderbox->getPositionY());
 	}
 	return collideTest;
@@ -128,7 +128,7 @@ void Chara::playSound(const char* filePath, float volume, float pitch)
 
 void Chara::initColliderBox()
 {
-	colliderbox = new Colliderbox(getPositionX() + 9.0f, getPositionY(), 14, 12);
+	colliderbox = new Colliderbox(getPositionX() + 10.0f, getPositionY(), 12, 12);
 	colliderbox->setColor(255, 0, 0, 128);
 }
 

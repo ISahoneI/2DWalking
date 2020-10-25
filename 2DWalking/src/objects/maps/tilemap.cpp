@@ -10,6 +10,13 @@ TileMap::TileMap(Texture* tileset, const char* xmlMapPath)
 
 TileMap::~TileMap()
 {
+	for (int lvl = 0; lvl < 5; lvl++) {
+		for (size_t i = 0; i < colliders.size(); i++)
+			delete levels[lvl][i];
+	}
+	for (size_t i = 0; i < colliders.size(); i++)
+		delete colliders[i];
+	delete tileset;
 }
 
 Tile* TileMap::getTileAt(const int lvl, const float x, const float y)
@@ -41,41 +48,59 @@ void TileMap::loadMapFromXml(const char* xmlMapPath)
 	for (rapidxml::xml_node<>* child = node->first_node(); child; child = child->next_sibling())
 	{
 		rapidxml::xml_node<>* nodeData = child->first_node();
+		if (strcmp(child->name(), "layer") == 0) {
+			if (nodeData != nullptr) {
+				float posX = 0;	float posY = (float)((height * tileheight));
 
-		if (nodeData != nullptr) {
-			float posX = 0;	float posY = (float)((height * tileheight));
-
-			std::stringstream s_stream(nodeData->value());
-			while (s_stream.good()) {
-				std::string substr;
-				getline(s_stream, substr, ',');
-				substr.erase(std::remove(substr.begin(), substr.end(), '\r'), substr.end());
-				substr.erase(std::remove(substr.begin(), substr.end(), '\n'), substr.end());
-				dataTile.push_back(substr);
-			}
-			for (size_t i = 0; i < dataTile.size(); i++) {
-				if (i % width == 0) {
-					posY -= tileheight;
-					posX = 0.0f;
+				std::stringstream s_stream(nodeData->value());
+				while (s_stream.good()) {
+					std::string substr;
+					getline(s_stream, substr, ',');
+					substr.erase(std::remove(substr.begin(), substr.end(), '\r'), substr.end());
+					substr.erase(std::remove(substr.begin(), substr.end(), '\n'), substr.end());
+					dataTile.push_back(substr);
 				}
 
-				int idTile = stoi(dataTile.at(i));
-				if (idTile > 0) {
-					Tile* tile = new Tile(posX, posY, (float)tilewidth, (float)tileheight, tileset, (SpriteLevel)lvl);
-					tile->setTexUVTileset(idTile);
-					levels[lvl].push_back(tile);
-				}
-				else {
-					Tile* tile = new Tile(posX, posY, (float)tilewidth, (float)tileheight, (SpriteLevel)lvl);
-					levels[lvl].push_back(tile);
+				for (size_t i = 0; i < dataTile.size(); i++) {
+					if (i % width == 0) {
+						posY -= tileheight;
+						posX = 0.0f;
+					}
+
+					int idTile = stoi(dataTile.at(i));
+					if (idTile > 0) {
+						Tile* tile = new Tile(posX, posY, (float)tilewidth, (float)tileheight, tileset, (SpriteLevel)lvl);
+						tile->setIdTile(idTile);
+						tile->setTexUVTileset(idTile);
+						levels[lvl].push_back(tile);
+					}
+					else {
+						Tile* tile = new Tile(posX, posY, (float)tilewidth, (float)tileheight, (SpriteLevel)lvl);
+						tile->setIdTile(idTile);
+						levels[lvl].push_back(tile);
+					}
+
+					posX += tilewidth;
 				}
 
-				posX += tilewidth;
-			}
-			if (strcmp(child->name(), "layer") == 0) {
 				lvl++;
 				dataTile.clear();
 			}
+		}
+		else if (strcmp(child->name(), "objectgroup") == 0) {
+			if (strcmp(child->first_attribute("name")->value(), "COLLIDERS") == 0) {
+				for (rapidxml::xml_node<>* colliderData = child->first_node(); colliderData; colliderData = colliderData->next_sibling()) {
+					float collX = (float)atoi(colliderData->first_attribute("x")->value());
+
+					float collW = (float)atoi(colliderData->first_attribute("width")->value());
+					float collH = (float)atoi(colliderData->first_attribute("height")->value());
+					float collY = (height * 16) - (float)atoi(colliderData->first_attribute("y")->value()) - collH;
+					colliders.push_back(new Colliderbox(collX, collY, collW, collH));
+				}
+			}
+		}
+		else if (strcmp(child->name(), "imagelayer") == 0) {
+
 		}
 	}
 }

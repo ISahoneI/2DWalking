@@ -21,12 +21,14 @@ void Engine::init()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	audioManager = new AudioManager();
+	fontManager = new FontManager();
 
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	shad.enable();
-	shad2.enable();
 
 	worldLayer = new WorldLayer(&shad);	layer2 = new Layer(&shad2);
+	worldLayer->setCamera(camera);
+
 	Texture* herosYzao = new Texture("res/textures/spritesheet/Heros_Yzao.png");
 	//Entities
 	map = new Sprite(0.0f, 0.0f, 800.0f, 1680.0f, new Texture("res/textures/Omara.png"), glm::vec4(255, 255, 255, 255));
@@ -39,7 +41,7 @@ void Engine::init()
 	colliderTest = new Colliderbox(96, 144, 176, 96);
 	colliderBordDown = new Colliderbox(-16, -16, 816, 16);
 
-	brouillard = new Sprite(0, 0, 16, 9, new Texture("res/textures/brouillard_bleu.png"), glm::vec4(255, 255, 255, 70));
+	brouillard = new Sprite(0, 0, ENGINE_RESOLUTION_X, ENGINE_RESOLUTION_Y, new Texture("res/textures/brouillard_bleu.png"), glm::vec4(255, 255, 255, 70));
 
 
 
@@ -53,7 +55,7 @@ void Engine::init()
 	layer2->add(brouillard);
 
 	tileMap = new TileMap(new Texture("res/textures/tilemaps/chipset.png"), "res/textures/tilemaps/map.tmx");
-	//worldLayer->add(tileMap);
+	worldLayer->setTilemap(tileMap);
 
 	//AUDIO
 	hp = new Sound3d();
@@ -102,7 +104,7 @@ void Engine::update(double deltaTime, double fixedDeltaTime, float elapsedTime)
 	double scrollY = InputManager::getScrollYOffset();
 	if (scrollY != 0)
 	{
-		camera.actionZoom((float)scrollY);
+		camera->actionZoom((float)scrollY);
 		//std::cout << "ScrollY = " << scrollY << std::endl;
 	}
 
@@ -110,7 +112,7 @@ void Engine::update(double deltaTime, double fixedDeltaTime, float elapsedTime)
 	if (InputManager::isKeyPressed(GLFW_KEY_SPACE))
 	{
 		player->setPosition(0.0f, 0.0f, 1.0f);
-		camera.setZoom(1.0f);
+		camera->setZoom(1.0f);
 	}
 
 
@@ -129,7 +131,8 @@ void Engine::update(double deltaTime, double fixedDeltaTime, float elapsedTime)
 		player->setTransparency(player_trans);
 	}
 	if (InputManager::isKeyPressed(GLFW_KEY_U)) {
-		skyle->setIsVisible(!skyle->getIsVisible());
+		layer2->add(FontManager::getTextToRender("We are\nVENOM !!", "msgothic12"));
+		//skyle->setIsVisible(!skyle->getIsVisible());
 		/*Sprite* mapTestAdd = new Sprite(player->getPositionX(), player->getPositionY(), 16.0f, 16.0f, texTest, glm::vec4(255, 255, 255, 255));
 		mapTestAdd->setLevel(SpriteLevel::FOREGROUND);
 		worldLayer->add(mapTestAdd);
@@ -174,20 +177,37 @@ void Engine::update(double deltaTime, double fixedDeltaTime, float elapsedTime)
 
 	player->move(xdir, ydir);
 
+	if (!player->getColliderbox()->isOverlap(charaTest->getColliderbox()))
+		charaTest->move(charaTest->getPositionX() + charaTest->getSpeed() * (float)deltaTime, charaTest->getPositionY());
+
 	player->collide(colliderTest);
 	player->collide(colliderBordDown);
 	player->collide(charaTest->getColliderbox());
-	/*for (Tile* tile : tileMap->getLevels(1)) {
-		player->collide(tile->getColliderbox());
-	}*/
+	float playerColliderX = player->getColliderbox()->getCenterX();
+	float playerColliderY = player->getColliderbox()->getCenterY();
+	player->collide(tileMap->getTileAt((int)player->getLevel(), playerColliderX + TILE_RESOLUTION, playerColliderY)->getColliderbox());
+	player->collide(tileMap->getTileAt((int)player->getLevel(), playerColliderX - TILE_RESOLUTION, playerColliderY)->getColliderbox());
+	player->collide(tileMap->getTileAt((int)player->getLevel(), playerColliderX, playerColliderY + TILE_RESOLUTION)->getColliderbox());
+	player->collide(tileMap->getTileAt((int)player->getLevel(), playerColliderX, playerColliderY - TILE_RESOLUTION)->getColliderbox());
+	player->collide(tileMap->getTileAt((int)player->getLevel(), playerColliderX + TILE_RESOLUTION, playerColliderY + TILE_RESOLUTION)->getColliderbox());
+	player->collide(tileMap->getTileAt((int)player->getLevel(), playerColliderX + TILE_RESOLUTION, playerColliderY - TILE_RESOLUTION)->getColliderbox());
+	player->collide(tileMap->getTileAt((int)player->getLevel(), playerColliderX - TILE_RESOLUTION, playerColliderY + TILE_RESOLUTION)->getColliderbox());
+	player->collide(tileMap->getTileAt((int)player->getLevel(), playerColliderX - TILE_RESOLUTION, playerColliderY - TILE_RESOLUTION)->getColliderbox());
+
+	for (Colliderbox* collider : tileMap->getColliders()) {
+		player->collide(collider);
+	}
+
 	player->update(deltaTime);
 
-	/************ CAMERA **************/
-	camera.centerOn(player->getCenterX(), player->getCenterY());
+	charaTest->update(deltaTime);
 
-	//worldLayer->clipping(camera);
-	worldLayer->update(camera, tileMap);
-	//std::cout << "x:" << (int)(player->getPositionX() / 16) << " y:" << (int)(player->getPositionY() / 16) << std::endl;
+	/************ CAMERA **************/
+	camera->centerOn(player->getCenterX(), player->getCenterY());
+
+
+	//std::cout << "x:" << (int)(player->getPositionX() / 16) << " y:" << (int)(player->getPositionY() / 16) << " TileID:" <<
+	//	tileMap->getTileAt(1, (player->getCenterX()), (int)(player->getPositionY() + 4))->getColliderbox()->getIsCollidable() << std::endl;
 	//if (tileMap->getTileAt(0, (player->getCenterX()), (int)(player->getPositionY() + 4)) != NULL)
 	//	tileMap->getTileAt(0, (player->getCenterX()), (int)(player->getPositionY() + 4))->setIsVisible(false);
 
@@ -198,10 +218,16 @@ void Engine::update(double deltaTime, double fixedDeltaTime, float elapsedTime)
 	mat = mat * glm::translate(glm::mat4(1), glm::vec3(-point_rotX, -point_rotY, -point_rotX));
 
 	shad.setUniformMat4("modele_mat", mat);*/
+	shad.enable();
 
-	shad.setUniformMat4("projection_mat", camera.getProjectionMatrix());
-	shad.setUniformMat4("view_mat", camera.getViewMatrix());
 
+	shad.setUniformMat4("projection_mat", camera->getProjectionMatrix());
+	shad.setUniformMat4("view_mat", camera->getViewMatrix());
+	worldLayer->update();
+
+	shad2.enable();
+
+	shad2.setUniformMat4("projection_mat", glm::ortho(0.0f, (float)ENGINE_RESOLUTION_X, 0.0f, (float)ENGINE_RESOLUTION_Y, -1.0f, 1.0f));
 	layer2->render();
 
 

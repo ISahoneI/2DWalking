@@ -58,6 +58,11 @@ public:
 	const float getPosRefX() const { return this->positionRef.x; }
 	const float getPosRefY() const { return this->positionRef.y; }
 
+	const float getBordXmin() const;
+	const float getBordXmax() const;
+	const float getBordYmin() const;
+	const float getBordYmax() const;
+
 private:
 	void initAxis();
 

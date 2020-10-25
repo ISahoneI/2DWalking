@@ -13,10 +13,8 @@ Colliderbox::~Colliderbox()
 }
 
 
-bool Colliderbox::isCollided(const Colliderbox* target)
+bool Colliderbox::isOverlap(const Colliderbox* target)
 {
-	if (!getIsCollidable())
-		return false;
 	bool collisionX = this->getPositionX() + this->getWidth() >= target->getPositionX() &&
 		target->getPositionX() + target->getWidth() >= this->getPositionX();
 
@@ -29,7 +27,7 @@ bool Colliderbox::isCollided(const Colliderbox* target)
 
 bool Colliderbox::collide(const Colliderbox* target)
 {
-	if (!getIsCollidable())
+	if (!getIsCollidable() || !target->getIsCollidable())
 		return false;
 
 	const glm::vec2 thisCenter = glm::vec2(getPositionX() + getWidth() * 0.5f, getPositionY() + getHeight() * 0.5f);

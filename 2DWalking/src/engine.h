@@ -30,6 +30,7 @@
 #include "objects/maps/tilemap.h"
 
 #include "utilities/global.h"
+#include "graphics/fonts/fontmanager.h"
 
 class Engine {
 
@@ -37,8 +38,9 @@ private:
 	//2560x1440		1280x720	854x480	  427x240
 	Window window = Window("2D Walking", 1280, 720, false);
 	AudioManager* audioManager;
+	FontManager* fontManager;
 
-	Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f));
+	Camera* camera;
 
 
 	Shader& shad = *new Shader("src/shaders/simple.vert", "src/shaders/simple.frag");

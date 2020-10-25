@@ -9,6 +9,15 @@ Sprite::Sprite()
 	setTexUV();
 }
 
+Sprite::Sprite(Texture* texture)
+{
+	this->isRender = true;
+	this->isVisible = true;
+	this->level = SpriteLevel::LEVEL0;
+	this->texture = texture;
+	setTexUV();
+}
+
 Sprite::Sprite(glm::vec3 position, glm::vec2 size, const glm::vec4 color)
 {
 	this->isRender = true;
